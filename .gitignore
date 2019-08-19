@@ -6,7 +6,6 @@ unit_test/*cpp
 unit_test/obj/*
 !unit_test/obj/.gitkeep
 
-resources.qrc
 makefile
 *cpp
 

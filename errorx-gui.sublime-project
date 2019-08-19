@@ -1,15 +1,36 @@
 {
 	"folders":
-    [
-        {
-        	"path": ".",
-        	"file_exclude_patterns": ["*.stash", "*project", "*tmp", "*.fasta", "*.fasta.out", "*.pdf"],
-        	"folder_exclude_patterns": ["*.app"],
-        }
-    ],
-    "settings":
-    {
-        "tab_size": 4,
-    	"translate_tabs_to_spaces": false
-    },
+	[
+		{
+			"path": ".",
+			"file_exclude_patterns": [
+				"*.stash", 
+				"*project", 
+				"*tmp", 
+				"*fast*", 
+				"*.pdf", 
+				".gitignore",
+				"*.tsv",
+				"model.nnet",
+				"qrc_resources.cpp",
+				"README.md"
+			],
+			"folder_exclude_patterns": [
+				"*.app",
+				"bin",
+				"database",
+				"images",
+				"internal_data",
+				"lib",
+				"obj",
+				"optional_file",
+				"output",
+			],
+		}
+	],
+	"settings":
+	{
+		"tab_size": 4,
+		"translate_tabs_to_spaces": false
+	},
 }
