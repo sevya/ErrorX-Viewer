@@ -8,7 +8,6 @@
 #include "GeneTab.hh"
 #include "ClonotypeTab.hh"
 #include "ErrorTab.hh"
-#include "CDRTab.hh"
 #include "DataTab.hh"
 #include "ParamsTab.hh"
 #include "OptionsDialog.hh"
@@ -190,9 +189,6 @@ void MainWindow::initTabs() {
 	clonotypeTab_ = new ClonotypeTab( this );
 	tabWidget->addTab( clonotypeTab_, "Clonotypes" );
 
-	cdrTab_ = new CDRTab( this );
-	tabWidget->addTab( cdrTab_, "CDR data" );
-
 	errorTab_ = new ErrorTab( this );
 	tabWidget->addTab( errorTab_, "Error profile" );
 
@@ -280,7 +276,6 @@ void MainWindow::exportProjectToPDF() {
 	summaryTab_->exportPDF( outputDir );
 	errorTab_->exportPDF( outputDir );
 	geneTab_->exportPDF( outputDir );
-	cdrTab_->exportPDF( outputDir );
 
 	dataTab_->update( /*fullData = */true );
 	dataTab_->selectCheckBox();
@@ -453,12 +448,11 @@ void MainWindow::go( QString const & inputFile ) {
 	
 	progressDialog = new ProgressDialog( this ); 
 
-	std::function<void(int,int,std::mutex*)> increment = std::bind(
+	std::function<void(int,int)> increment = std::bind(
 				&MainWindow::incrementProgress,
 				this,
 				std::placeholders::_1,
-				std::placeholders::_2,
-				std::placeholders::_3
+				std::placeholders::_2
 				);
 
 	std::function<void(void)> reset = std::bind(
@@ -536,9 +530,6 @@ void MainWindow::runProtocolDone() {
 	errorTab_->records( records_ );
 	errorTab_->update();
 
-	cdrTab_->records( records_ );
-	cdrTab_->update();
-
 	dataTab_->records( records_ );
 	dataTab_->update();
 
@@ -554,7 +545,7 @@ void MainWindow::runProtocolDone() {
 
 void MainWindow::activateHiddenWindows() {
 	// remove the welcome tab if it's still present
-	if ( tabWidget->count() == 8 ) tabWidget->removeTab( 0 );
+	if ( tabWidget->count() == 7 ) tabWidget->removeTab( 0 );
 
 	saveAction->setEnabled( true );
 	saveProjectButton->setEnabled( true );
@@ -565,10 +556,7 @@ void MainWindow::activateHiddenWindows() {
 
 
 ///////////////// Progress bar related fxns //////////////////////////
-void MainWindow::incrementProgressSlot( int value, int total, std::mutex* mut ) { 
-	std::cout << "increment called with values " << value << " : " << total << " and mutex " << mut<< std::endl; // TODO remove
-	// mut->lock(); // TODO change back
-	std::cout << "locked it up" << std::endl; // TODO remove
+void MainWindow::incrementProgressSlot( int value, int total ) { 
 
 	QProgressBar* bar = progressDialog->getBar();
 
@@ -584,12 +572,9 @@ void MainWindow::incrementProgressSlot( int value, int total, std::mutex* mut ) 
 	bar->setValue( newValue );
 
 	progressDialog->updateLowerText();
-
-	// mut->unlock(); // TODO change back
 }
 
 void MainWindow::resetProgressSlot() {
-	std::cout << "reset called" << std::endl; // TODO remove
 
 	QProgressBar* bar = progressDialog->getBar();
 	progressDialog->setValue( 0 );
@@ -599,7 +584,6 @@ void MainWindow::resetProgressSlot() {
 }
 
 void MainWindow::finishProgressSlot() {
-	std::cout << "finish called" << std::endl; // TODO remove
 
 	QProgressBar* bar = progressDialog->getBar();
 	
@@ -610,15 +594,13 @@ void MainWindow::finishProgressSlot() {
 }
 
 void MainWindow::setProgressMessageSlot( QString message ) {
-	std::cout << "message called" << std::endl; // TODO remove
-
 	// Progress is reset when IGBlast is done and sequence correction is starting
 	// Update the label to say that
 	progressDialog->getTopLabel()->setText( message );
 }
 
-void MainWindow::incrementProgress( int value, int total, std::mutex* mut ) { 
-	emit incrementProgressSignal( value, total, mut);
+void MainWindow::incrementProgress( int value, int total ) { 
+	emit incrementProgressSignal( value, total );
 }
 
 void MainWindow::resetProgress() {

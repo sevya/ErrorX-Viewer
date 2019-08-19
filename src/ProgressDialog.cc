@@ -12,7 +12,6 @@
 #include "ProgressDialog.hh"
 
 #include <iostream>
-#include <mutex>
 
 ProgressDialog::ProgressDialog( QWidget* parent ) :
 	QWidget( parent ),

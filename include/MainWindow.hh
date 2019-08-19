@@ -17,7 +17,6 @@
 #include "GeneTab.hh"
 #include "ClonotypeTab.hh"
 #include "ErrorTab.hh"
-#include "CDRTab.hh"
 #include "DataTab.hh"
 #include "ParamsTab.hh"
 #include "ProgressDialog.hh"
@@ -42,7 +41,7 @@ public:
 	void records( errorx::SequenceRecordsSP const records );
 
 	/////////////// Progress bar related fxns //////////////////////////
-	void incrementProgress( int value, int total, std::mutex* mut );
+	void incrementProgress( int value, int total );
 	void resetProgress();
 	void finishProgress();
 	void setProgressMessage( std::string message );
@@ -50,7 +49,7 @@ public:
 
 signals:
 	///////////////// Progress bar related fxns //////////////////////////
-	void incrementProgressSignal( int value, int total, std::mutex* mut );
+	void incrementProgressSignal( int value, int total );
 	void resetProgressSignal();
 	void finishProgressSignal();
 	void setProgressMessageSignal( QString message );
@@ -72,7 +71,7 @@ public slots:
 	void resetRecords();
 
 	///////////////// Progress bar related fxns //////////////////////////
-	void incrementProgressSlot( int value, int total, std::mutex* mut );
+	void incrementProgressSlot( int value, int total );
 	void resetProgressSlot();
 	void finishProgressSlot();
 	void setProgressMessageSlot( QString message );
@@ -134,7 +133,6 @@ private:
 	GeneTab* geneTab_;
 	ClonotypeTab* clonotypeTab_;
 	ErrorTab* errorTab_;
-	CDRTab* cdrTab_;
 	DataTab* dataTab_;
 	ParamsTab* paramsTab_;
 	////////// END Tabs /////////
