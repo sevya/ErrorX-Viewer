@@ -48,12 +48,15 @@ public:
 	/////////////// END Progress bar related fxns //////////////////////
 
 signals:
+	// Unit testing
+	void verifySummaryTab();
 	///////////////// Progress bar related fxns //////////////////////////
 	void incrementProgressSignal( int value, int total );
 	void resetProgressSignal();
 	void finishProgressSignal();
 	void setProgressMessageSignal( QString message );
 	///////////////// END Progress bar related fxns //////////////////////
+	
 
 public slots:
 	void fileMenuPrefs();

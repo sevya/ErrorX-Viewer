@@ -239,7 +239,12 @@ void MainWindow::initProgressCallbacks() {
 
 void MainWindow::fileMenuPrefs() {
 	OptionsDialog options( settings_ );
-	/*int returnValue = */options.exec();
+	int returnValue = options.exec();
+
+	// if dialog was accepted, use the settings
+	if ( returnValue==1 ) { 
+		options_ = gui_util::optionsFromSettings( settings_ );
+	}
 }
 
 void MainWindow::newProject() {
@@ -541,6 +546,8 @@ void MainWindow::runProtocolDone() {
 
 	// Show the hidden windows that only get activated after run
 	activateHiddenWindows();
+
+	emit verifySummaryTab();
 }
 
 void MainWindow::activateHiddenWindows() {
