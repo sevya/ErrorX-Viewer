@@ -31,7 +31,7 @@ void TestMainWindow::testGUI() {
 void TestMainWindow::testRunFromFileMenu() {
 	main = new MainWindow();
 
-	connect( main, &MainWindow::verifySummaryTab,
+	connect( main, &MainWindow::verifyTabValues,
 			 this, &TestMainWindow::checkSummaryTab );
 
 	// Set up options
@@ -39,6 +39,9 @@ void TestMainWindow::testRunFromFileMenu() {
 	main->options_->error_threshold( errorx::constants::OPTIMIZED_THRESHOLD );
 	main->options_->correction( 'N' );
 	main->options_->allow_nonproductive( 1 );
+	main->options_->species( "human" );
+	main->options_->igtype( "Ig" );
+
 
 	QTimer::singleShot( 1, this, &TestMainWindow::testFASTQDialog );
 	main->newProjectAction->trigger();
@@ -53,7 +56,7 @@ void TestMainWindow::checkSummaryTab() {
 
 	QCOMPARE( main->summaryTab_->line2->text(), "100" );
 	QCOMPARE( main->summaryTab_->line3->text(), "79" );
-	QCOMPARE( main->summaryTab_->line4->text(), "59" );
+	QCOMPARE( main->summaryTab_->line4->text(), "48" );
 	QCOMPARE( main->summaryTab_->line5->text(), "79" );
 
 	auto it = main->summaryTab_->plotBars->data()->begin();
