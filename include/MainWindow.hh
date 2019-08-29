@@ -48,8 +48,9 @@ public:
 	/////////////// END Progress bar related fxns //////////////////////
 
 signals:
-	// Unit testing
-	void verifySummaryTab();
+	// Triggers functions in the unit tests to make sure that tabs
+	// have the correct values
+	void verifyTabValues();
 	///////////////// Progress bar related fxns //////////////////////////
 	void incrementProgressSignal( int value, int total );
 	void resetProgressSignal();

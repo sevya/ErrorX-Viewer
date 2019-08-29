@@ -547,7 +547,9 @@ void MainWindow::runProtocolDone() {
 	// Show the hidden windows that only get activated after run
 	activateHiddenWindows();
 
-	emit verifySummaryTab();
+	// This emits a function in the unit tests that checks that
+	// all the tabs have their correct values
+	emit verifyTabValues();
 }
 
 void MainWindow::activateHiddenWindows() {
