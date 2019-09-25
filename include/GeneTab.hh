@@ -12,6 +12,10 @@
 class GeneTab : public QWidget {
 	Q_OBJECT
 
+#ifdef UNITTEST
+#include "../unit_test/friendship.hh"
+#endif
+
 public:
 	explicit GeneTab( QWidget *parent=0 );
 
@@ -45,10 +49,12 @@ private:
 	QCustomPlot* vGenePlot;
 	QCPBars* vBars;
 	QCPTextElement* vTitle;
+	QSharedPointer<QCPAxisTickerText> vTicker;
 
 	QCustomPlot* jGenePlot;
 	QCPBars* jBars;
 	QCPTextElement* jTitle;
+	QSharedPointer<QCPAxisTickerText> jTicker;
 };
 
 #endif // GENETAB_HH

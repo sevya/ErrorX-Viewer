@@ -14,6 +14,10 @@
 class DataTab : public QWidget {
 	Q_OBJECT
 
+#ifdef UNITTEST
+#include "../unit_test/friendship.hh"
+#endif
+
 public:
 	explicit DataTab( QWidget* parent=0 );
 
@@ -28,7 +32,7 @@ public:
 	public slots:
 		void copySelected();
 		void copyAll();
-		void exportTable( QString inputFile="" );
+		void exportTable( QString inputFile="", bool showConfirmation=1 );
 
 private:
 	void init();

@@ -68,7 +68,9 @@ private:
 	QRadioButton* radioButtonMouse;
 
 // Needed for unit testing
-friend class TestMainWindow;
+#ifdef UNITTEST
+#include "../unit_test/friendship.hh"
+#endif
 
 };
  

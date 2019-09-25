@@ -10,6 +10,12 @@ namespace gui_util {
 // does not address filename, filetype, species, receptor type
 errorx::ErrorXOptionsSP optionsFromSettings( QSettings* const settings);
 
+// Create checksum of a file to compare if two are equal
+QByteArray checksum( QString const & fileName );
+
+// Takes whatever is in the clipboard and writes to a file
+void clipboardToFile( QString const & fileName );
+
 } // namespace gui_util
 
 #endif // GUI_UTIL_HH

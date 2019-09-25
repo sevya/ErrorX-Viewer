@@ -41,16 +41,6 @@ void DataTab::init() {
 	mainTable = new QTableWidget( 0, 0, this );
 	mainTable->horizontalHeader()->setSectionResizeMode( QHeaderView::ResizeToContents );
 
-	// vector<std::string> labels = { "SequenceID", "V_gene", "V_identity", "V_Evalue", "D_gene", "D_identity", "D_Evalue", "J_gene", "J_identity", "J_Evalue", "Strand", "Chain", "Productive", "CDR3_NT_sequence", "CDR3_AA_sequence", "Full_NT_sequence", "Full_GL_NT_sequence", "Full_AA_sequence", "Full_NT_sequence_corrected", "Full_AA_sequence_corrected", "N_errors" };
-
-	// QTableWidgetItem* colName;
-	// for ( size_t ii = 0; ii < labels.size(); ++ii ) {
-	// 	colName = new QTableWidgetItem( QString::fromStdString(labels[ ii ]) );
-	// 	colName->setTextAlignment( Qt::AlignLeft ); 
-	// 	mainTable->setHorizontalHeaderItem( ii, colName );
-	// }
-	// mainTable->horizontalHeader()->setSectionResizeMode( QHeaderView::ResizeToContents );
-
 	mainLayout->addWidget( mainTable );
 
 	lowerPanel = new QWidget( this );
@@ -112,12 +102,7 @@ void DataTab::update( bool fullData ) {
 	// Clear in case it's been used before
 	mainTable->setRowCount( 0 );
 
-	vector<std::string> labels;
-	if ( fullData ) {
-		labels = { "SequenceID", "V_gene", "V_identity", "V_Evalue", "D_gene", "D_identity", "D_Evalue", "J_gene", "J_identity", "J_Evalue", "Strand", "Chain", "Productive", "CDR3_NT_sequence", "CDR3_AA_sequence", "Full_NT_sequence", "Full_GL_NT_sequence", "Full_AA_sequence", "Full_NT_sequence_corrected", "Full_AA_sequence_corrected", "N_errors" };
-	} else {
-		labels = { "SequenceID", "V_gene", "D_gene", "J_gene", "Full_NT_sequence","Full_NT_sequence_corrected", "N_errors" };
-	}
+	vector<std::string> labels = errorx::util::get_labels( fullData );
 
  	mainTable->setColumnCount( labels.size() );
 
@@ -130,60 +115,18 @@ void DataTab::update( bool fullData ) {
 
 	mainTable->setRowCount( records_->good_records() );
  
-	errorx::SequenceRecordPtr record;
-	vector<string> tableData;
-	int row_it = 0;
+	vector<vector<string>> tableData = records_->get_summary( fullData );
 
-	for ( int ii = 0; ii < records_->size(); ++ii ) {
-		
-		record = records_->get( ii );
-
-		if ( !record->isGood()) continue;
- 
- 		if ( fullData ) {
-			tableData = {
-				record->sequenceID(),
-				record->v_gene(),
-				record->sequence().v_identity_fmt(),
-				record->sequence().v_evalue_fmt(),
-				record->d_gene(),
-				record->sequence().d_identity_fmt(),
-				record->sequence().d_evalue_fmt(),
-				record->j_gene(),
-				record->sequence().j_identity_fmt(),
-				record->sequence().j_evalue_fmt(),
-				record->sequence().strand(),
-				record->sequence().chain(),
-				record->sequence().productive_fmt(),
-				record->sequence().cdr3_nt_sequence(),
-				record->sequence().cdr3_aa_sequence(),
-				record->sequence().full_nt_sequence(),
-				record->sequence().full_gl_nt_sequence(),
-				record->sequence().full_aa_sequence(),
-				record->sequence().full_nt_sequence_corrected(),
-				record->sequence().full_aa_sequence_corrected(),
-				to_string( record->n_errors() )
-			};
-		} else { 
-			tableData = {
-				record->sequenceID(),
-				record->v_gene(),
-				record->d_gene(),
-				record->j_gene(),
-				record->sequence().full_nt_sequence(),
-				record->sequence().full_nt_sequence_corrected(),
-				to_string( record->n_errors() )
-			};
-		}
- 
-		for ( size_t jj = 0; jj < tableData.size(); ++jj ) {
+	for ( size_t row_it = 0; row_it < tableData.size(); ++row_it ) {
+		for ( size_t col_it = 0; col_it < tableData[row_it].size(); ++col_it ) {
 			mainTable->setItem( 
-				row_it, jj, 
-				new QTableWidgetItem( QString::fromStdString( tableData[jj] ))
+				row_it, col_it, 
+				new QTableWidgetItem( QString::fromStdString( 
+					tableData[ row_it ][ col_it ] 
+					))
 				);
+
 		}
- 
-		++row_it;
 	}
 }
 
@@ -191,19 +134,21 @@ QString DataTab::tableToQString() {
 	QTableWidgetItem* currentCell;
 	QString text = "";
 
-	vector<QString> labels;
-	if ( mainTable->columnCount() == 7 ) {
-		labels = { "SequenceID", "V_gene", "D_gene", "J_gene", "Full_NT_sequence","Full_NT_sequence_corrected", "N_errors" };
-	} else {
-		labels = { "SequenceID", "V_gene", "V_identity", "V_Evalue", "D_gene", "D_identity", "D_Evalue", "J_gene", "J_identity", "J_Evalue", "Strand", "Chain", "Productive", "CDR3_NT_sequence", "CDR3_AA_sequence", "Full_NT_sequence", "Full_GL_NT_sequence", "Full_AA_sequence", "Full_NT_sequence_corrected", "Full_AA_sequence_corrected", "N_errors" };
-	}
+	// TODO fix this hacky way
+	vector<string> labels = errorx::util::get_labels( 
+		/*fulldata=*/mainTable->columnCount()!=7 
+		);
 
-	vector<QString>::const_iterator it = labels.begin();
-	text += *it;
+	// vector<QString> labels;
+
+	// for ( string str : strLabels ) labels.push_back( QString::fromStdString( str ));
+
+	vector<string>::const_iterator it = labels.begin();
+	text += QString::fromStdString( *it );
 	++it;
 	for ( ; it != labels.end(); ++it ) {
 		text += "\t";
-		text += *it;
+		text += QString::fromStdString( *it );
 	}
 	text += "\n";
 
@@ -227,17 +172,15 @@ QString DataTab::tableToQString() {
 }
 
 void DataTab::copyAll() {
-
-	update( /*fullData = */true );
-	selectCheckBox();
-	
+	// update( /*fullData = */true );
+	// selectCheckBox();
 	QString text = tableToQString();
 	QClipboard* clipboard = QGuiApplication::clipboard();
 	clipboard->clear();
 	clipboard->setText( text );
 }
 
-void DataTab::exportTable( QString inputFile ) {
+void DataTab::exportTable( QString inputFile, bool showConfirmation/*=1*/ ) {
 
 	if ( inputFile == "" ) {
 		inputFile = QFileDialog::getSaveFileName(
@@ -260,12 +203,14 @@ void DataTab::exportTable( QString inputFile ) {
 		file.close();
 	}
 
-	QMessageBox box( QMessageBox::NoIcon,
+	if ( showConfirmation ) {
+		QMessageBox box( QMessageBox::NoIcon,
 		 "Success!",
 		 "File written succesfully!",
 		 QMessageBox::Ok );
 
-	box.exec();
+		box.exec();
+	}
 }
 
 void DataTab::copySelected() {

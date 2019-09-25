@@ -17,6 +17,10 @@ class OptionsDialog : public QDialog
 {
 	Q_OBJECT
  
+#ifdef UNITTEST
+#include "../unit_test/friendship.hh"
+#endif
+
 public:
 	explicit OptionsDialog( QSettings* settings, QDialog* parent=0 );
 	~OptionsDialog();

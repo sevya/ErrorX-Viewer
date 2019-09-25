@@ -15,7 +15,9 @@ output/
 
 *.app/
 
-*fast*
+*fastq
+*fasta
+*fasta.out
 *tsv
 
 .qmake.stash

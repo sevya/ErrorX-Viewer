@@ -12,6 +12,10 @@
 class ClonotypeTab : public QWidget {
 	Q_OBJECT
 
+#ifdef UNITTEST
+#include "../unit_test/friendship.hh"
+#endif
+	
 public:
 	explicit ClonotypeTab( QWidget *parent=0 );
 	
@@ -25,7 +29,7 @@ signals:
 public slots:
 	void copySelected();
 	void copyAll();
-	void exportTable( QString inputFile="" );
+	void exportTable( QString inputFile="", bool showConfirmation=1 );
 
 
 private:

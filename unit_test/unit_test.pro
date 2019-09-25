@@ -16,15 +16,18 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 # Input
-SOURCES = ../src/ProgressDialog.cc ../src/MainWindow.cc ../src/OptionsDialog.cc ../src/ConfirmFile.cc ../src/ErrorTab.cc ../src/SummaryTab.cc ../src/GeneTab.cc ../src/ClonotypeTab.cc ../src/DataTab.cc ../src/ParamsTab.cc ../src/qcustomplot.cc ../src/ErrorXWorker.cc ../src/gui_util.cc ../src/WelcomeTab.cc
+SOURCES = ../src/ProgressDialog.cc ../src/MainWindow.cc ../src/OptionsDialog.cc ../src/ConfirmFile.cc ../src/ErrorTab.cc ../src/SummaryTab.cc ../src/GeneTab.cc ../src/CDRTab.cc ../src/ClonotypeTab.cc ../src/DataTab.cc ../src/ParamsTab.cc ../src/qcustomplot.cc ../src/ErrorXWorker.cc ../src/gui_util.cc ../src/WelcomeTab.cc
 
-HEADERS = ../include/ProgressDialog.hh ../include/MainWindow.hh ../include/OptionsDialog.hh ../include/ConfirmFile.hh ../include/ErrorTab.hh ../include/SummaryTab.hh ../include/GeneTab.hh ../include/ClonotypeTab.hh ../include/DataTab.hh ../include/ParamsTab.hh ../include/qcustomplot.hh ../include/ErrorXWorker.hh ../include/gui_util.hh ../include/WelcomeTab.hh
+HEADERS = ../include/ProgressDialog.hh ../include/MainWindow.hh ../include/OptionsDialog.hh ../include/ConfirmFile.hh ../include/ErrorTab.hh ../include/SummaryTab.hh ../include/GeneTab.hh ../include/CDRTab.hh ../include/ClonotypeTab.hh ../include/DataTab.hh ../include/ParamsTab.hh ../include/qcustomplot.hh ../include/ErrorXWorker.hh ../include/gui_util.hh ../include/WelcomeTab.hh
 
 
-SOURCES += TestMainWindow.cc
+HEADERS += TestFastq.hh TestTSV.hh TestBadFastq.hh TestProjectExport.hh TestProjectImport.hh TestSetPreferences.hh
+SOURCES += TestFastq.cc TestTSV.cc TestBadFastq.cc TestProjectExport.cc TestProjectImport.cc TestSetPreferences.cc main.cc
 
-INCLUDEPATH += ../../ErrorX_devel/include/ ../include/
+INCLUDEPATH += ../../ErrorX_devel/include/ ../include/ .
 LIBS += -L ../lib/ -lerrorx
+
+DEFINES += "UNITTEST=1"
 
 OBJECTS_DIR = obj/
 MOC_DIR = obj/

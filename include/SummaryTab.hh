@@ -13,6 +13,10 @@
 class SummaryTab : public QWidget {
 	Q_OBJECT
 
+#ifdef UNITTEST
+#include "../unit_test/friendship.hh"
+#endif
+
 public:
 	explicit SummaryTab( QWidget *parent=0 );
 

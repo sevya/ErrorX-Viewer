@@ -12,6 +12,10 @@
 class ErrorTab : public QWidget {
 	Q_OBJECT
 
+#ifdef UNITTEST
+#include "../unit_test/friendship.hh"
+#endif
+
 public:
 	explicit ErrorTab( QWidget *parent=0 );
 

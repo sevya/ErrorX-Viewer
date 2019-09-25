@@ -6,6 +6,7 @@
 #include "WelcomeTab.hh"
 #include "SummaryTab.hh"
 #include "GeneTab.hh"
+#include "CDRTab.hh"
 #include "ClonotypeTab.hh"
 #include "ErrorTab.hh"
 #include "DataTab.hh"
@@ -69,6 +70,11 @@ MainWindow::MainWindow( QWidget* parent ) :
  	initSettings();
  	// Set up callbacks for progress bar
  	initProgressCallbacks();
+
+ 	// If I load from a saved project, progressDialog is
+ 	// never used and it can cause a segfault
+ 	// Just initialize here to be safe
+ 	progressDialog = new ProgressDialog( this ); 
 }
 
 // Initialize menu bar
@@ -113,7 +119,7 @@ void MainWindow::initMenuBar() {
 	// Set up help menu
 	helpMenu = new QMenu( "Help", this );
 	// Set up actions I want
-	documentationAction  = new QAction( "Documentation", this );
+	documentationAction = new QAction( "Documentation", this );
 	contactAction		= new QAction( "Contact us", this );
 	licenseAction		= new QAction( "Input license", this );
 
@@ -186,6 +192,9 @@ void MainWindow::initTabs() {
 	geneTab_ = new GeneTab( this );
 	tabWidget->addTab( geneTab_, "V-J gene usage" );
 
+	cdrTab_ = new CDRTab( this );
+	tabWidget->addTab( cdrTab_, "CDR lengths" );
+
 	clonotypeTab_ = new ClonotypeTab( this );
 	tabWidget->addTab( clonotypeTab_, "Clonotypes" );
 
@@ -245,6 +254,8 @@ void MainWindow::fileMenuPrefs() {
 	if ( returnValue==1 ) { 
 		options_ = gui_util::optionsFromSettings( settings_ );
 	}
+
+	emit signalUnitTest();
 }
 
 void MainWindow::newProject() {
@@ -281,12 +292,19 @@ void MainWindow::exportProjectToPDF() {
 	summaryTab_->exportPDF( outputDir );
 	errorTab_->exportPDF( outputDir );
 	geneTab_->exportPDF( outputDir );
+	cdrTab_->exportPDF( outputDir );
 
 	dataTab_->update( /*fullData = */true );
 	dataTab_->selectCheckBox();
-	dataTab_->exportTable( outputDir + QDir::separator() + "sequences.tsv" );
+	dataTab_->exportTable( 
+		outputDir + QDir::separator() + "sequences.tsv",
+	 	/*bool showConfirmation=*/0 
+	 	);
 
-	clonotypeTab_->exportTable( outputDir + QDir::separator() + "clonotypes.tsv" );
+	clonotypeTab_->exportTable( 
+		outputDir + QDir::separator() + "clonotypes.tsv",
+		/*bool showConfirmation=*/0
+		);
 
 	QMessageBox box( QMessageBox::NoIcon,
 		 "Success!",
@@ -296,24 +314,28 @@ void MainWindow::exportProjectToPDF() {
 	box.exec();
 }
 
+// Only checks that the header is correct
 bool MainWindow::isValidErrorXTSV( QString const & file ) {
 	// validate that first column has correct headers
-	vector<std::string> labels = { "SequenceID", "V_gene", "V_identity", "V_Evalue", "D_gene", "D_identity", "D_Evalue", "J_gene", "J_identity", "J_Evalue", "Strand", "Chain", "Productive", "CDR3_NT_sequence", "CDR3_AA_sequence", "Full_NT_sequence", "Full_GL_NT_sequence", "Full_AA_sequence", "Full_NT_sequence_corrected", "Full_AA_sequence_corrected", "N_errors" };
+	vector<string> labels = errorx::util::get_labels();
 
-	std::ifstream in( file.toStdString() );
-	std::string str;
-	bool isValid = true;
+	ifstream instream( file.toStdString() );
+	string line;
 
-	for ( vector<std::string>::const_iterator it = labels.begin();
-		it != labels.end(); ++it ) {
-		in >> str;
-		if ( str != (*it) ) {
-			isValid = false;
-			break;
-		}
+	// get header line
+	getline( instream, line );
+	vector<string> tokens = errorx::util::tokenize_string<string>( line, 
+			"\t", // delim
+			1 //token_compress 
+			);
+
+	if ( labels.size() != tokens.size() ) return 0;
+
+	for ( size_t ii = 0; ii < tokens.size(); ++ii ) {
+		if ( labels[ ii ] != tokens[ ii ] ) return 0;
 	}
-	in.close();
-	return isValid;
+
+	return 1;
 }
 
 void MainWindow::populateFromExisting( QString const & file ) {
@@ -332,17 +354,20 @@ void MainWindow::populateFromExisting( QString const & file ) {
 
 	vector<SequenceRecordPtr> records_vector;
 	vector<string> tokens;
+	vector<string> labels = errorx::util::get_labels();
+
 	ifstream instream( file.toStdString() );
 
-	getline( instream, line ); // discard first line
+	// discard first line
+	getline( instream, line );
 
 	while ( getline( instream, line ) ) {
 		tokens = util::tokenize_string<string>( line, 
-			"\t ", // delim
+			"\t", // delim
 			1 //token_compress 
 			);
 		
-		if ( tokens.size() != 21 ) { // 21 fields in ErrorX tsv
+		if ( tokens.size() != labels.size() ) { 
 			QMessageBox box( QMessageBox::Warning,
 				"Error",
 				"Input file is not a valid ErrorX TSV. "
@@ -360,6 +385,7 @@ void MainWindow::populateFromExisting( QString const & file ) {
 	try {
 		options_->infile( file.toStdString() );
 		records_ = SequenceRecordsSP( new SequenceRecords( records_vector, *options_ ));
+
 	} catch ( exception & e ) {
 		QMessageBox box( QMessageBox::Warning,
 					 "Error",
@@ -450,8 +476,6 @@ void MainWindow::go( QString const & inputFile ) {
 	confirm->setFile( inputFile );
 	int returnValue = confirm->exec();
 	if ( returnValue==0 ) return;
-	
-	progressDialog = new ProgressDialog( this ); 
 
 	std::function<void(int,int)> increment = std::bind(
 				&MainWindow::incrementProgress,
@@ -507,7 +531,10 @@ void MainWindow::exceptionMessage( QString const e ) {
 					 "Error",
 					 e,
 					 QMessageBox::Ok );
- 
+ 	 	
+ 	// Signal to unit tests
+	emit signalUnitTest();
+
 	box.exec();
 }
 
@@ -518,6 +545,7 @@ void MainWindow::resetRecords() {
 
 void MainWindow::runProtocolDone() {
 	progressDialog->close();
+
 	// delete progressDialog;
 	// If the operation is cancelled mid-run records_ will be null
 	// in that case exit now
@@ -531,6 +559,9 @@ void MainWindow::runProtocolDone() {
 
 	geneTab_->records( records_ );
 	geneTab_->update();
+
+	cdrTab_->records( records_ );
+	cdrTab_->update();
 
 	errorTab_->records( records_ );
 	errorTab_->update();
@@ -549,12 +580,14 @@ void MainWindow::runProtocolDone() {
 
 	// This emits a function in the unit tests that checks that
 	// all the tabs have their correct values
-	emit verifyTabValues();
+	emit signalUnitTest();
 }
 
 void MainWindow::activateHiddenWindows() {
 	// remove the welcome tab if it's still present
-	if ( tabWidget->count() == 7 ) tabWidget->removeTab( 0 );
+	// WelcomeTab* tmp = qobject_cast<WelcomeTab*>( tabWidget->widget( 0 ));
+	// if ( tmp != nullptr ) tabWidget->removeTab( 0 );
+	if ( tabWidget->count() == 8 ) tabWidget->removeTab( 0 );
 
 	saveAction->setEnabled( true );
 	saveProjectButton->setEnabled( true );

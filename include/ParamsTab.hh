@@ -10,6 +10,10 @@
 class ParamsTab : public QWidget {
 	Q_OBJECT
 
+#ifdef UNITTEST
+#include "../unit_test/friendship.hh"
+#endif
+
 public:
 	explicit ParamsTab( QWidget *parent=0 );
 

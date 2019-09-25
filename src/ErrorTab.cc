@@ -119,26 +119,23 @@ void ErrorTab::update() {
 		}
 	}
 
-	// Bin errors into a histogram
-	int min = 0;
-	int max = *(max_element( errors.begin(), errors.end() ));
 
-	// This algorithm only works bc the min is at zero,
-	// so I can easily infer the indices
-	vector<int> bins( max-min+1, 0 );
-	for ( size_t ii = 0; ii < errors.size(); ++ii ) {
-		bins[ errors[ii] ]++;
-	}
+	map<int,float> bins = errorx::util::bin_values( errors, /*normalized=*/0 );
 
 	QVector<double>  binCounts;
 	QVector<QString> binNames;
 	QVector<double>  binIndices;
 
-	for ( size_t ii = 0; ii < bins.size(); ++ii ) {
-		binNames   << QString::number( ii );
-		binCounts  << bins[ii];
+	map<int,float>::const_iterator bin_it;
+	int ii = 0;
+
+	for ( bin_it = bins.begin(); bin_it != bins.end(); ++bin_it ) {
+		binNames   << QString::number( bin_it->first );
+		binCounts  << bin_it->second;
 		binIndices << ii;
+		ii++;
 	}
+
 
 	// make bars object
 	plotBars = new QCPBars(

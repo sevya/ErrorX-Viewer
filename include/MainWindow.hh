@@ -15,6 +15,7 @@
 #include "WelcomeTab.hh"
 #include "SummaryTab.hh"
 #include "GeneTab.hh"
+#include "CDRTab.hh"
 #include "ClonotypeTab.hh"
 #include "ErrorTab.hh"
 #include "DataTab.hh"
@@ -32,7 +33,9 @@
 class MainWindow : public QWidget {
 	Q_OBJECT
 
-friend class TestMainWindow;
+#ifdef UNITTEST
+#include "../unit_test/friendship.hh"
+#endif
 
 public:
 	explicit MainWindow( QWidget *parent = 0 );
@@ -50,7 +53,7 @@ public:
 signals:
 	// Triggers functions in the unit tests to make sure that tabs
 	// have the correct values
-	void verifyTabValues();
+	void signalUnitTest();
 	///////////////// Progress bar related fxns //////////////////////////
 	void incrementProgressSignal( int value, int total );
 	void resetProgressSignal();
@@ -135,6 +138,7 @@ private:
 	WelcomeTab* welcomeTab_;
 	SummaryTab* summaryTab_;
 	GeneTab* geneTab_;
+	CDRTab* cdrTab_;
 	ClonotypeTab* clonotypeTab_;
 	ErrorTab* errorTab_;
 	DataTab* dataTab_;

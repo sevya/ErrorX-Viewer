@@ -210,7 +210,7 @@ void ClonotypeTab::copyAll() {
 	clipboard->setText( text );
 }
 
-void ClonotypeTab::exportTable( QString inputFile ) {
+void ClonotypeTab::exportTable( QString inputFile, bool showConfirmation/*=1*/ ) {
 	if ( inputFile == "" ) {
 		inputFile = QFileDialog::getSaveFileName(
 			this,
@@ -232,12 +232,14 @@ void ClonotypeTab::exportTable( QString inputFile ) {
 		file.close();
 	}
 
-	QMessageBox box( QMessageBox::NoIcon,
+	if ( showConfirmation ) {
+		QMessageBox box( QMessageBox::NoIcon,
 		 "Success!",
 		 "File written succesfully!",
 		 QMessageBox::Ok );
 
-	box.exec();
+		box.exec();
+	}
 }
 
 void ClonotypeTab::records( errorx::SequenceRecordsSP const records ) { records_ = records; }

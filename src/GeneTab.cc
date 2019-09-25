@@ -136,9 +136,9 @@ void GeneTab::updateVGene() {
 	vBars->setAntialiased( false );
 
 	// set up the axes
-	QSharedPointer<QCPAxisTickerText> textTicker( new QCPAxisTickerText );
-	textTicker->addTicks( geneIndices, geneNames );
-	vGenePlot->xAxis->setTicker( textTicker );
+	vTicker = QSharedPointer<QCPAxisTickerText>( new QCPAxisTickerText );
+	vTicker->addTicks( geneIndices, geneNames );
+	vGenePlot->xAxis->setTicker( vTicker );
 	vGenePlot->xAxis->setTickLabelRotation( 90 );
 	vGenePlot->yAxis->setLabel( "Counts" );
 
@@ -219,9 +219,9 @@ void GeneTab::updateJGene() {
 	jBars->setAntialiased(false);
 
 	// set up the axes
-	QSharedPointer<QCPAxisTickerText> textTicker( new QCPAxisTickerText );
-	textTicker->addTicks( geneIndices, geneNames );
-	jGenePlot->xAxis->setTicker( textTicker );
+	jTicker = QSharedPointer<QCPAxisTickerText>( new QCPAxisTickerText );
+	jTicker->addTicks( geneIndices, geneNames );
+	jGenePlot->xAxis->setTicker( jTicker );
 	jGenePlot->xAxis->setTickLabelRotation( 90 );
 	jGenePlot->yAxis->setLabel( "Counts" );
 
