@@ -118,6 +118,7 @@ private:
 	QAction* saveAction;
 	QAction* exportPDFAction;
 	QAction* prefsAction;
+	QAction* prefsAction2;
 
 	QMenu* helpMenu;
 	QAction* documentationAction;

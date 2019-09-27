@@ -1,6 +1,7 @@
 #include <QApplication>
 
 #include "TestFastq.hh"
+#include "TestFasta.hh"
 #include "TestTSV.hh"
 #include "TestBadFastq.hh"
 #include "TestProjectExport.hh"
@@ -15,6 +16,10 @@ int main( int argc, char** argv ) {
 	// 	TestFastq tc;
 	// 	status |= QTest::qExec(&tc, argc, argv);
 	// }
+	{
+		TestFasta tc;
+		status |= QTest::qExec(&tc, argc, argv);
+	}
 	// {
 	// 	TestTSV tc;
 	// 	status |= QTest::qExec(&tc, argc, argv);
@@ -31,9 +36,9 @@ int main( int argc, char** argv ) {
 	// 	TestProjectImport tc;
 	// 	status |= QTest::qExec(&tc, argc, argv);	
 	// }
-	{
-		TestSetPreferences tc;
-		status |= QTest::qExec(&tc, argc, argv);	
-	}
+	// {
+	// 	TestSetPreferences tc;
+	// 	status |= QTest::qExec(&tc, argc, argv);	
+	// }
 	return status;
 }

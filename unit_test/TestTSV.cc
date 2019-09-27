@@ -180,14 +180,14 @@ void TestTSV::checkErrorTab() {
 }
  
 void TestTSV::checkTSVTabsEliminated() {
-	QCOMPARE( main->welcomeTab_->isEnabled(), 1 );
-	QCOMPARE( main->summaryTab_->isEnabled(), 1 );
-	QCOMPARE( main->welcomeTab_->isEnabled(), 1 );
-	QCOMPARE( main->geneTab_->isEnabled(), 0 );
-	QCOMPARE( main->clonotypeTab_->isEnabled(), 0 );
-	QCOMPARE( main->errorTab_->isEnabled(), 1 );
-	QCOMPARE( main->dataTab_->isEnabled(), 1 );
-	QCOMPARE( main->paramsTab_->isEnabled(), 1 );
+	QVERIFY( main->welcomeTab_->isEnabled() );
+	QVERIFY( main->summaryTab_->isEnabled() );
+	QVERIFY( main->welcomeTab_->isEnabled() );
+	QVERIFY( !main->geneTab_->isEnabled() );
+	QVERIFY( !main->clonotypeTab_->isEnabled() );
+	QVERIFY( main->errorTab_->isEnabled() );
+	QVERIFY( main->dataTab_->isEnabled() );
+	QVERIFY( main->paramsTab_->isEnabled() );
 }
 
 void TestTSV::testTSVDialog() {

@@ -21,8 +21,8 @@ SOURCES = ../src/ProgressDialog.cc ../src/MainWindow.cc ../src/OptionsDialog.cc 
 HEADERS = ../include/ProgressDialog.hh ../include/MainWindow.hh ../include/OptionsDialog.hh ../include/ConfirmFile.hh ../include/ErrorTab.hh ../include/SummaryTab.hh ../include/GeneTab.hh ../include/CDRTab.hh ../include/ClonotypeTab.hh ../include/DataTab.hh ../include/ParamsTab.hh ../include/qcustomplot.hh ../include/ErrorXWorker.hh ../include/gui_util.hh ../include/WelcomeTab.hh
 
 
-HEADERS += TestFastq.hh TestTSV.hh TestBadFastq.hh TestProjectExport.hh TestProjectImport.hh TestSetPreferences.hh
-SOURCES += TestFastq.cc TestTSV.cc TestBadFastq.cc TestProjectExport.cc TestProjectImport.cc TestSetPreferences.cc main.cc
+HEADERS += TestFastq.hh TestFasta.hh TestTSV.hh TestBadFastq.hh TestProjectExport.hh TestProjectImport.hh TestSetPreferences.hh
+SOURCES += TestFastq.cc TestFasta.cc TestTSV.cc TestBadFastq.cc TestProjectExport.cc TestProjectImport.cc TestSetPreferences.cc main.cc
 
 INCLUDEPATH += ../../ErrorX_devel/include/ ../include/ .
 LIBS += -L ../lib/ -lerrorx

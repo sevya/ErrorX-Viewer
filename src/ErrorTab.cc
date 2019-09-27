@@ -76,7 +76,7 @@ void ErrorTab::init() {
 }
 
 void ErrorTab::initPlot() {
-// Initialize plot
+	// Initialize plot
 	plot = new QCustomPlot();
 	QSizePolicy policy = plot->sizePolicy();
 	policy.setHorizontalStretch( 2 );
@@ -97,10 +97,15 @@ void ErrorTab::reinitPlot() {
 }
 
 void ErrorTab::update() {
-
+	// FASTA format does not have this tab
+	if ( records_->get_options()->format() == "fasta" ) {
+		setEnabled( false );
+		reinitPlot();
+		return;
+	}
 	// If there are no good records, return now
 	if ( records_->good_records()==0 ) return;
-	
+
 	reinitPlot();
 
 	// Get error rate and set fields

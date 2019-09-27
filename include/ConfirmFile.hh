@@ -53,6 +53,7 @@ private:
 	QHBoxLayout* extLayout;
 	QLabel* label1;
 	QRadioButton* radioButtonFASTQ;
+	QRadioButton* radioButtonFASTA;
 	QRadioButton* radioButtonTSV;
 
 	QGroupBox* igtypeGroup;

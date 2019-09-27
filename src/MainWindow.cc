@@ -90,6 +90,7 @@ void MainWindow::initMenuBar() {
 	saveAction		   = new QAction( "Save Project", this );
 	exportPDFAction	   = new QAction( "Export Project Files", this );
 	prefsAction		   = new QAction( "Preferences", this );
+	prefsAction2	   = new QAction( "Set preferences", this );
 
 	saveAction->setEnabled( false );
 	exportPDFAction->setEnabled( false );
@@ -100,6 +101,7 @@ void MainWindow::initMenuBar() {
 	fileMenu->addAction( saveAction );
 	fileMenu->addAction( exportPDFAction );
 	fileMenu->addAction( prefsAction );
+	fileMenu->addAction( prefsAction2 );
 
 	// Connect signals to action handlers
 	connect( newProjectAction, &QAction::triggered,
@@ -111,6 +113,8 @@ void MainWindow::initMenuBar() {
 	connect( exportPDFAction, &QAction::triggered,
 			 this, &MainWindow::exportProjectToPDF );
 	connect( prefsAction,&QAction::triggered,
+		 	 this, &MainWindow::fileMenuPrefs );
+	connect( prefsAction2,&QAction::triggered,
 		 	 this, &MainWindow::fileMenuPrefs );
 
 	menuBar->addMenu( fileMenu );
@@ -346,6 +350,7 @@ void MainWindow::populateFromExisting( QString const & file ) {
 			"Please check file and try again.",
 			QMessageBox::Ok );
 		box.exec();
+		return;
 	}
 
 	using namespace std;
@@ -412,10 +417,12 @@ void MainWindow::dropEvent( QDropEvent* e ) {
  
 	if ( fileName.suffix() != "fastq" &&
 		 fileName.suffix() != "fq"	&&
+		 fileName.suffix() != "fasta" &&
+		 fileName.suffix() != "fa"	&&
 		 fileName.suffix() != "tsv" ) {
 		QMessageBox box( QMessageBox::Warning,
 					 "Error",
-					 "Invalid file type: ErrorX only accepts files of type FASTQ or TSV (extensions .fastq, .fq, or .tsv)",
+					 "Invalid file type: ErrorX only accepts files of type FASTQ, FASTA, or TSV (extensions .fastq, .fq, .fasta, .fa, or .tsv)",
 					 QMessageBox::Ok );
  
 		box.exec();

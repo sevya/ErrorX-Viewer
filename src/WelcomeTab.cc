@@ -22,6 +22,7 @@ void WelcomeTab::init() {
 		"Drop a file here, click \"New project\" in the menu, or go to \"File->New Project\""
 		"<h3>Valid file types:</h3>"
 		"FASTQ files with extension .fastq or .fq<br>"
+		"FASTA files with extension .fasta or .fa<br>"
 		"TSV files with four columns, tab-separated, no header:<br>1. Sequence ID, 2. NT sequence, 3. Germline sequence, 4. PHRED score"
 		);
 	welcomeLabel->setAlignment( Qt::AlignCenter );

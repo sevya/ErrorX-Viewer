@@ -81,6 +81,7 @@ void ConfirmFile::buildFileTypeSection() {
 	// Build section to select the file type
 	extGroup = new QGroupBox( this );
 	radioButtonFASTQ = new QRadioButton( "FASTQ" );
+	radioButtonFASTA = new QRadioButton( "FASTA" );
 	radioButtonTSV = new QRadioButton( "TSV" );
 	// extGroup->setTitle( "File type?" );
 
@@ -88,6 +89,7 @@ void ConfirmFile::buildFileTypeSection() {
 
 	extLayout = new QHBoxLayout(); // this );
 	extLayout->addWidget( radioButtonFASTQ );
+	extLayout->addWidget( radioButtonFASTA );
 	extLayout->addWidget( radioButtonTSV );
 	extLayout->addStretch( 1 );
 	extGroup->setLayout( extLayout );
@@ -151,7 +153,10 @@ void ConfirmFile::acceptDialog() {
 	}
 
 	options_->infile( inputFile.toStdString() );
-	options_->format( radioButtonFASTQ->isChecked() ? "fastq" : "tsv" );
+	if ( radioButtonFASTQ->isChecked() ) options_->format( "fastq" );
+	else if ( radioButtonFASTA->isChecked() ) options_->format( "fasta" );
+	else if ( radioButtonTSV->isChecked() ) options_->format( "tsv" );
+
 	options_->species( radioButtonHuman->isChecked() ? "human" : "mouse" );
 	options_->igtype( radioButtonBCR->isChecked() ? "Ig" : "TCR" );
 	accept();
@@ -166,7 +171,7 @@ void ConfirmFile::chooseFile() {
 		this,
 		tr("Choose input file"),
 		"", //directory
-		"FASTQ or TSV files (*.fastq *.fq *.tsv)" // filters
+		"FASTQ, FASTA, or TSV files (*.fastq *.fq *.fasta *.fa *.tsv)" // filters
 	);
  
 	if ( inputFile.isNull() ) return;
@@ -190,5 +195,7 @@ void ConfirmFile::autofillExtension( QString const & infile ) {
 		radioButtonTSV->setChecked( true );
 	} else if ( ext=="fastq" || ext=="fq" ) {
 		radioButtonFASTQ->setChecked( true );
+	} else if ( ext=="fasta" || ext=="fa" ) {
+		radioButtonFASTA->setChecked( true );
 	}
 }
