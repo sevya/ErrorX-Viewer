@@ -55,6 +55,7 @@ private:
 	QCPBars* jBars;
 	QCPTextElement* jTitle;
 	QSharedPointer<QCPAxisTickerText> jTicker;
+
 };
 
 #endif // GENETAB_HH

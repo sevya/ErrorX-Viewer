@@ -37,7 +37,7 @@ void TestProjectImport::verifyTabCorrectness() {
 
 	// Check that records object is equal to what it should be
 	ErrorXOptionsPtr options( new ErrorXOptions( *main->options_ ));
-	options->infile( "../100.fastq" );
+	options->infile( "testing/100.fastq" );
 	options->format( "fastq" );
 	
 	// TODO implement this equality later on
@@ -97,16 +97,14 @@ void TestProjectImport::checkDataTab() {
 	getline( in, line );
 	
 	QTableWidgetItem* item;
-	cout << "row count is " << table->rowCount() << endl;
-	cout << "col count is " << table->columnCount() << endl;
+
 	for ( int row_it = 0 ; row_it < table->rowCount(); ++row_it ) {
 		getline( in, line );
 		tokens = errorx::util::tokenize_string<string>( line, "\t" );
 		token_it = 0;
 		for ( int col_it = 0; col_it < table->columnCount(); ++col_it ) {
 			item = table->item( row_it, col_it );
-			// cout << item->text().toStdString(); // TODO remove
-			// cout << " : " << tokens[token_it] << endl;; // TODO remove
+
 			QCOMPARE( 
 				QString::fromStdString( tokens[token_it] ), 
 				item->text() 

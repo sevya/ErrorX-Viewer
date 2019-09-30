@@ -11,30 +11,6 @@ void TestFasta::testGUI() {
 	QCOMPARE( main->tabWidget->count(), 8 );
 }
 
-void TestFasta::testChecksum() {
-	QString testStr = "this is just a test\nof the checksum function\tto make sure it's equivalent";
-	
-	QFile fileOne( "fileOne.txt" );
-	fileOne.open( QIODevice::WriteOnly );
-	QTextStream outOne( &fileOne );
-	outOne << testStr;
-	fileOne.close();
-
-	QFile fileTwo( "fileTwo.txt" );
-	fileTwo.open( QIODevice::WriteOnly );
-	QTextStream outTwo( &fileTwo );
-	outTwo << testStr;
-	fileTwo.close();
-
-	QCOMPARE( 
-		gui_util::checksum( "fileOne.txt" ), 
-		gui_util::checksum( "fileTwo.txt" ) 
-		);
-
-	fileOne.remove();
-	fileTwo.remove();
-}
-
 void TestFasta::testRunFromFileMenu() {
 
 	main = new MainWindow();
@@ -125,6 +101,7 @@ void TestFasta::checkDataTab() {
 		token_it = 0;
 		for ( int col_it = 0; col_it < table->columnCount(); ++col_it ) {
 			item = table->item( row_it, col_it );
+			// cout << tokens[ token_it ] << " : " << item->text().toStdString() << endl; // TODO remove
 			QCOMPARE( 
 				QString::fromStdString( tokens[token_it] ), 
 				item->text() 
@@ -316,9 +293,9 @@ void TestFasta::testFASTADialog() {
 	foreach ( QWidget* w, QApplication::topLevelWidgets() ) {
 		ConfirmFile* confirm = qobject_cast<ConfirmFile*>( w );
 		if ( confirm != nullptr ) {
-			confirm->setFile( "../100.fasta" );
+			confirm->setFile( "testing/100.fasta" );
 
-			QCOMPARE( confirm->fileEdit->text(), "../100.fasta" );
+			QCOMPARE( confirm->fileEdit->text(), "testing/100.fasta" );
 			QVERIFY( confirm->radioButtonFASTA->isChecked() );
 			QVERIFY( !confirm->radioButtonFASTQ->isChecked() );
 			QVERIFY( !confirm->radioButtonTSV->isChecked() );

@@ -1,5 +1,5 @@
 TEMPLATE = app
-TARGET = ErrorX_Viewer
+TARGET = "ErrorX_Viewer"
 
 QT = core gui charts
 

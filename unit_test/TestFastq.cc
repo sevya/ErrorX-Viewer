@@ -331,9 +331,9 @@ void TestFastq::testFASTQDialog() {
 	foreach ( QWidget* w, QApplication::topLevelWidgets() ) {
 		ConfirmFile* confirm = qobject_cast<ConfirmFile*>( w );
 		if ( confirm != nullptr ) {
-			confirm->setFile( "../100.fastq" );
+			confirm->setFile( "testing/100.fastq" );
 
-			QCOMPARE( confirm->fileEdit->text(), "../100.fastq" );
+			QCOMPARE( confirm->fileEdit->text(), "testing/100.fastq" );
 			QVERIFY( confirm->radioButtonFASTQ->isChecked() );
 			QVERIFY( !confirm->radioButtonTSV->isChecked() );
 

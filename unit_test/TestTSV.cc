@@ -194,9 +194,9 @@ void TestTSV::testTSVDialog() {
 	foreach ( QWidget* w, QApplication::topLevelWidgets() ) {
 		ConfirmFile* confirm = qobject_cast<ConfirmFile*>( w );
 		if ( confirm != nullptr ) {
-			confirm->setFile( "../ExampleInput250.tsv" );
+			confirm->setFile( "testing/ExampleInput250.tsv" );
 
-			QCOMPARE( confirm->fileEdit->text(), "../ExampleInput250.tsv" );
+			QCOMPARE( confirm->fileEdit->text(), "testing/ExampleInput250.tsv" );
 			QVERIFY( !confirm->radioButtonFASTQ->isChecked() );
 			QVERIFY( confirm->radioButtonTSV->isChecked() );
 
