@@ -12,7 +12,7 @@ HEADERS = include/ProgressDialog.hh include/MainWindow.hh include/OptionsDialog.
 OBJECTS_DIR = obj/
 MOC_DIR = obj/
 
-INCLUDEPATH += include/ ../ErrorX_devel/include
+INCLUDEPATH += include/ include/errorx/
 LIBS += -L lib/ -lerrorx
 CONFIG += c++11
 RESOURCES = resources.qrc
