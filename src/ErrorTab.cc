@@ -106,6 +106,8 @@ void ErrorTab::update() {
 	// If there are no good records, return now
 	if ( records_->good_records()==0 ) return;
 
+	setEnabled( true );
+	
 	reinitPlot();
 
 	// Get error rate and set fields

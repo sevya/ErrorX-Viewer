@@ -32,14 +32,20 @@ errorx::ErrorXOptionsSP optionsFromSettings( QSettings* const settings ) {
 		settings->value( "correction", "N" ).toChar().toLatin1() 
 		);
 
-	// TODO make this platform independent...
-	QString basePath = 
-		QCoreApplication::applicationDirPath() +
+	// Set basepath based on OS and the way the app gets bundled
+	QString basePath;
+#if defined(_WIN32) || defined(_WIN64)
+// TODO fill in here
+#elif defined(__APPLE__) || defined(__MACH__) 
+	basePath = QCoreApplication::applicationDirPath() +
 		QDir::separator() +
 		".." + 
 		QDir::separator() +
 		"Resources" + 
 		QDir::separator();
+#elif defined(__linux__)
+// TODO fill in here
+#endif
 
 	options->errorx_base( basePath.toStdString() );
 	options->verbose( 0 );

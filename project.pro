@@ -19,7 +19,7 @@ RESOURCES = resources.qrc
 QMAKE_POST_LINK = bash post_build_copy.sh $$TARGET
 ICON = images/helix_icon.icns
 
-CONFIG += qt debug
+# CONFIG += qt debug
 
 ex_extra.files = ../ErrorX_devel/bin ../ErrorX_devel/database ../ErrorX_devel/internal_data ../ErrorX_devel/lib ../ErrorX_devel/optional_file ../ErrorX_devel/model.nnet 
 ex_extra.path = Contents/Resources

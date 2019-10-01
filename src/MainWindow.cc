@@ -293,10 +293,19 @@ void MainWindow::exportProjectToPDF() {
 		QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks );
 	if ( outputDir.isNull() ) return;
 
+	// Check if tab is enabled first, so that I don't export 
+	// tabs that aren't being used
 	summaryTab_->exportPDF( outputDir );
-	errorTab_->exportPDF( outputDir );
-	geneTab_->exportPDF( outputDir );
-	cdrTab_->exportPDF( outputDir );
+
+	if ( errorTab_->isEnabled() ) {
+		errorTab_->exportPDF( outputDir );
+	}
+	if ( geneTab_->isEnabled() ) {
+		geneTab_->exportPDF( outputDir );
+	}
+	if ( cdrTab_->isEnabled() ) {
+		cdrTab_->exportPDF( outputDir );
+	}
 
 	dataTab_->update( /*fullData = */true );
 	dataTab_->selectCheckBox();
@@ -305,10 +314,12 @@ void MainWindow::exportProjectToPDF() {
 	 	/*bool showConfirmation=*/0 
 	 	);
 
-	clonotypeTab_->exportTable( 
-		outputDir + QDir::separator() + "clonotypes.tsv",
-		/*bool showConfirmation=*/0
-		);
+	if ( clonotypeTab_->isEnabled() ) {
+		clonotypeTab_->exportTable( 
+			outputDir + QDir::separator() + "clonotypes.tsv",
+			/*bool showConfirmation=*/0
+			);
+	}
 
 	QMessageBox box( QMessageBox::NoIcon,
 		 "Success!",
@@ -592,9 +603,9 @@ void MainWindow::runProtocolDone() {
 
 void MainWindow::activateHiddenWindows() {
 	// remove the welcome tab if it's still present
-	// WelcomeTab* tmp = qobject_cast<WelcomeTab*>( tabWidget->widget( 0 ));
-	// if ( tmp != nullptr ) tabWidget->removeTab( 0 );
-	if ( tabWidget->count() == 8 ) tabWidget->removeTab( 0 );
+	WelcomeTab* tmp = qobject_cast<WelcomeTab*>( tabWidget->widget( 0 ));
+	if ( tmp != nullptr ) tabWidget->removeTab( 0 );
+	// if ( tabWidget->count() == 8 ) tabWidget->removeTab( 0 );
 
 	saveAction->setEnabled( true );
 	saveProjectButton->setEnabled( true );
