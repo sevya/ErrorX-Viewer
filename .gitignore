@@ -1,6 +1,8 @@
 obj/*
 !obj/.gitkeep
 
+lib/liberrorx.dylib
+
 unit_test/Makefile
 unit_test/*cpp
 unit_test/obj/*
