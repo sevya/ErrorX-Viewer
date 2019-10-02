@@ -21,7 +21,7 @@ ICON = images/helix_icon.icns
 
 # CONFIG += qt debug
 
-ex_extra.files = ../ErrorX_devel/bin ../ErrorX_devel/database ../ErrorX_devel/internal_data ../ErrorX_devel/lib ../ErrorX_devel/optional_file ../ErrorX_devel/model.nnet 
+ex_extra.files = bin database internal_data lib optional_file model.nnet 
 ex_extra.path = Contents/Resources
 QMAKE_BUNDLE_DATA += ex_extra
 
