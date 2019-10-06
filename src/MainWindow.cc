@@ -90,18 +90,20 @@ void MainWindow::initMenuBar() {
 	saveAction		   = new QAction( "Save Project", this );
 	exportPDFAction	   = new QAction( "Export Project Files", this );
 	prefsAction		   = new QAction( "Preferences", this );
-	prefsAction2	   = new QAction( "Set preferences", this );
+	// prefsAction2	   = new QAction( "Set preferences", this );
 
 	saveAction->setEnabled( false );
 	exportPDFAction->setEnabled( false );
 
+	// Prevent this from going to the "Preferences" section
+	prefsAction->setMenuRole( QAction::NoRole );
 
 	fileMenu->addAction( newProjectAction );
 	fileMenu->addAction( openProjectAction );
 	fileMenu->addAction( saveAction );
 	fileMenu->addAction( exportPDFAction );
 	fileMenu->addAction( prefsAction );
-	fileMenu->addAction( prefsAction2 );
+	// fileMenu->addAction( prefsAction2 );
 
 	// Connect signals to action handlers
 	connect( newProjectAction, &QAction::triggered,

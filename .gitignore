@@ -15,10 +15,10 @@ output/
 
 *.app/
 
-*fastq
-*fasta
-*fasta.out
-*tsv
+./*fastq
+./*fasta
+./*fasta.out
+./*tsv
 
 .qmake.stash
 
