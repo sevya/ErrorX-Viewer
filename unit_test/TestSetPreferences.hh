@@ -25,6 +25,7 @@ public slots:
 	void enterSettingsRestoreDefaultsDone();
 	void enterSettingsCancel();
 	void enterSettingsCancelDone();
+	void cleanupTestCase();
 	// void enterSettingsReject();
 
 private:

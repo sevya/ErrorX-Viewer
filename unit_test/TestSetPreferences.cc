@@ -204,6 +204,10 @@ void TestSetPreferences::enterSettingsCancelDone() {
 	QCOMPARE( main->options_->allow_nonproductive(), 0 );
 }
 
+void TestSetPreferences::cleanupTestCase() {
+	enterSettingsRestoreDefaultsDone();
+}
+
 // QTEST_MAIN( TestSetPreferences )
 // #include "TestSetPreferences.moc"
 
