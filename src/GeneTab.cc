@@ -35,6 +35,10 @@ GeneTab::~GeneTab() {
 }
 
 void GeneTab::init() {
+	createTabWidget();
+}
+
+void GeneTab::createTabWidget() {
 	tabWidget = new QTabWidget( this );
 	tabWidget->setTabPosition( QTabWidget::South );
 
@@ -42,51 +46,66 @@ void GeneTab::init() {
 	jGenePlot = new QCustomPlot();
 
 	// These basically don't do anything, they just give the tabs a layout
-	vlayout = new QVBoxLayout(); // this );
-	jlayout = new QVBoxLayout(); // this );
+	vlayout = new QVBoxLayout();
+	jlayout = new QVBoxLayout(); 
 
-	vparent = new QWidget( this );
-	jparent = new QWidget( this );
+	vparent = new QWidget( tabWidget );
+	jparent = new QWidget( tabWidget );
 	vparent->setLayout( vlayout );
 	jparent->setLayout( jlayout );
 
 	vlayout->addWidget( vGenePlot );
 	jlayout->addWidget( jGenePlot );
-	// vGenePlot->setLayout( vlayout );
-	// jGenePlot->setLayout( jlayout );
 
 	tabWidget->addTab( vparent, "V Genes" );
 	tabWidget->addTab( jparent, "J Genes" );
 
-	mainLayout = new QVBoxLayout(); // this );
+	mainLayout = new QVBoxLayout();
 	mainLayout->addWidget( tabWidget );
 	setLayout( mainLayout );
 }
 
-void GeneTab::reinitVGenePlot() {
-	vlayout->removeWidget( vGenePlot );
-	delete vGenePlot;
-	vGenePlot = new QCustomPlot();
-	vlayout->addWidget( vGenePlot );
+void GeneTab::createAltWidget() {
+	altWidget = new QWidget();
+	altLayout = new QVBoxLayout();
+	QLabel* text = new QLabel( "<b>Gene view is not available when using TSV input</b>", this );
+	text->setAlignment(Qt::AlignCenter);
+	altLayout->addWidget( text );
+	altWidget->setLayout( altLayout );
+	setLayout( altLayout );
 }
 
-void GeneTab::reinitJGenePlot() {
-	jlayout->removeWidget( jGenePlot );
-	delete jGenePlot;
-	jGenePlot = new QCustomPlot();
-	jlayout->addWidget( jGenePlot );
+void GeneTab::clearLayout() {
+	for ( int ii = 0; ii < layout()->count(); ++ii ) {
+		QWidget* widget = layout()->itemAt( ii )->widget();
+		if ( widget != nullptr ) {
+			layout()->removeWidget( widget );
+		}
+	}
+	delete mainLayout;
+	delete tabWidget;
+	delete altLayout;
+	delete altWidget;
 }
 
 void GeneTab::update() {
+	// Remove whatever is currently in the layout
+	clearLayout();
+ 
 	// TSV input does not have this tab
 	if ( records_->get_options()->format() == "tsv" ) {
 		setEnabled( false );
-		// clear plots
-		reinitVGenePlot();
-		reinitJGenePlot();
-		return;
+
+		// Add in the alternative layout
+		createAltWidget();
+
 	} else {
 		setEnabled( true );
+
+		// Add in the TabWidget regular layout
+		createTabWidget();
+
+		// Update plots
 		updateVGene();
 		updateJGene();
 	}
@@ -95,7 +114,7 @@ void GeneTab::update() {
 void GeneTab::updateVGene() {
 	if ( records_==nullptr ) return;
 
-	reinitVGenePlot();
+	// reinitVGenePlot();
 
 	// Get V gene values
 	map<string,int> vgeneMap = records_->vgene_counts();
@@ -179,7 +198,7 @@ void GeneTab::updateVGene() {
 void GeneTab::updateJGene() {
 	if ( records_==nullptr ) return;
 
-	reinitJGenePlot();
+	// reinitJGenePlot();
 	
 	// Get J gene values
 	map<string,int> jgeneMap = records_->jgene_counts();

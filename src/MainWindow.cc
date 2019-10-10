@@ -43,6 +43,7 @@
 #include <QSettings>
 #include <QToolBar>
 #include <QDesktopServices>
+#include <QDebug>
 
 // Std headers
 #include <iostream>
@@ -62,12 +63,16 @@ MainWindow::MainWindow( QWidget* parent ) :
 
 	// Initialize menu bar
 	initMenuBar();	
+
 	// Initialize tool bar
 	initToolBar();
+
 	// Initialize tab widget
 	initTabs();
+
 	// Set up settings file
  	initSettings();
+
  	// Set up callbacks for progress bar
  	initProgressCallbacks();
 
@@ -115,8 +120,6 @@ void MainWindow::initMenuBar() {
 	connect( exportPDFAction, &QAction::triggered,
 			 this, &MainWindow::exportProjectToPDF );
 	connect( prefsAction,&QAction::triggered,
-		 	 this, &MainWindow::fileMenuPrefs );
-	connect( prefsAction2,&QAction::triggered,
 		 	 this, &MainWindow::fileMenuPrefs );
 
 	menuBar->addMenu( fileMenu );

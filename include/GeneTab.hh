@@ -32,19 +32,22 @@ public slots:
 
 private:
 	void init();
-	void reinitVGenePlot();
-	void reinitJGenePlot();
+	void createTabWidget();
+	void createAltWidget();
+	void clearLayout();
 
 	void updateVGene();
 	void updateJGene();
 
 	errorx::SequenceRecordsSP records_;
 	QTabWidget* tabWidget;
+	QWidget* altWidget;
 	QVBoxLayout* vlayout;
 	QVBoxLayout* jlayout;
 	QWidget* vparent;
 	QWidget* jparent;
 	QVBoxLayout* mainLayout;
+	QVBoxLayout* altLayout;
 
 	QCustomPlot* vGenePlot;
 	QCPBars* vBars;
