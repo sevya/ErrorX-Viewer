@@ -32,9 +32,8 @@ public slots:
 
 private:
 	void init();
-	void reinitCDR1Plot();
-	void reinitCDR2Plot();
-	void reinitCDR3Plot();
+	void createTabWidget();
+	void createAltWidget();
 
 	void updateCDR1();
 	void updateCDR2();
@@ -50,6 +49,9 @@ private:
 	QVBoxLayout* cdr2Layout;
 	QVBoxLayout* cdr3Layout;
 
+	QWidget* altWidget;
+	QVBoxLayout* altLayout;
+	
 	QWidget* cdr1Parent;
 	QWidget* cdr2Parent;
 	QWidget* cdr3Parent;

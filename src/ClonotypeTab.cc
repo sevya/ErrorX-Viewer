@@ -10,6 +10,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QSizePolicy>
+#include <QDebug>
 
 #include <iostream>
 
@@ -27,6 +28,10 @@ ClonotypeTab::ClonotypeTab( QWidget* parent ) :
 ClonotypeTab::~ClonotypeTab() {}
 
 void ClonotypeTab::init() {
+	createTabWidget();
+}
+
+void ClonotypeTab::createTabWidget() {
 	mainLayout = new QVBoxLayout( this );
 	setLayout( mainLayout );
 
@@ -52,11 +57,11 @@ void ClonotypeTab::init() {
 
 	mainLayout->addWidget( cloneTable );
 
-	lowerPanel = new QWidget( this );
+	lowerPanel = new QWidget(); // this );
 	lowerLayout = new QHBoxLayout(); // this );
 	lowerPanel->setLayout( lowerLayout );
 
-	copyButton = new QPushButton( "Copy selected cells", this );
+	copyButton = new QPushButton( "Copy selected cells" );//, this );
 	QSizePolicy pol = copyButton->sizePolicy();
 	pol.setHorizontalPolicy( QSizePolicy::Fixed );
 	copyButton->setSizePolicy( pol );
@@ -66,7 +71,7 @@ void ClonotypeTab::init() {
 	lowerLayout->addWidget( copyButton );
 
 
-	copyAllButton = new QPushButton( "Copy table", this );
+	copyAllButton = new QPushButton( "Copy table" );//, this );
 	copyAllButton->setSizePolicy( pol );
 	// Connect copy button action
 	connect( copyAllButton, &QPushButton::released, 
@@ -74,7 +79,7 @@ void ClonotypeTab::init() {
 	lowerLayout->addWidget( copyAllButton );
 
 
-	exportButton = new QPushButton( "Export table", this );
+	exportButton = new QPushButton( "Export table" );//, this );
 	copyAllButton->setSizePolicy( pol );
 	// Connect copy button action
 	connect( exportButton, &QPushButton::released, 
@@ -87,20 +92,41 @@ void ClonotypeTab::init() {
 	lowerLayout->addStretch();
 
 	mainLayout->addWidget( lowerPanel );
+
+}
+
+void ClonotypeTab::createAltWidget() {
+	altWidget = new QWidget();
+	altLayout = new QVBoxLayout();
+	QLabel* text = new QLabel( "<b>Clonotype view is not available when using TSV input</b>", this );
+	text->setAlignment(Qt::AlignCenter);
+	altLayout->addWidget( text );
+	altWidget->setLayout( altLayout );
+	setLayout( altLayout );
 }
 
 void ClonotypeTab::update() {
 	if ( records_==nullptr ) return;
 
-	// clear table if it's been used before
-	cloneTable->setRowCount( 0 );
- 	setEnabled( true );
+	// Remove whatever is currently in the layout
+	qDeleteAll( this->children() );
 
 	// TSV input does not have this tab
 	if ( records_->get_options()->format() == "tsv" ) {
 		setEnabled( false );
+
+		// Add in the alternative layout
+		createAltWidget();
+
 		return;
-	}
+	} 
+	
+	setEnabled( true );
+
+	createTabWidget();
+
+	// clear table if it's been used before
+	cloneTable->setRowCount( 0 );
 
 	using namespace errorx;
  

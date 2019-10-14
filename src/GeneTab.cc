@@ -75,22 +75,11 @@ void GeneTab::createAltWidget() {
 	setLayout( altLayout );
 }
 
-void GeneTab::clearLayout() {
-	for ( int ii = 0; ii < layout()->count(); ++ii ) {
-		QWidget* widget = layout()->itemAt( ii )->widget();
-		if ( widget != nullptr ) {
-			layout()->removeWidget( widget );
-		}
-	}
-	delete mainLayout;
-	delete tabWidget;
-	delete altLayout;
-	delete altWidget;
-}
-
 void GeneTab::update() {
+	if ( records_==nullptr ) return;
+	
 	// Remove whatever is currently in the layout
-	clearLayout();
+	qDeleteAll( this->children() );
  
 	// TSV input does not have this tab
 	if ( records_->get_options()->format() == "tsv" ) {

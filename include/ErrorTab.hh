@@ -33,8 +33,10 @@ public slots:
 
 private:
 	void init();
+	void createTabWidget();
+	void createAltWidget();
 	void initPlot();
-	void reinitPlot();
+	// void reinitPlot();
 
 	errorx::SequenceRecordsSP records_;
 	QVBoxLayout* lay1;
@@ -49,6 +51,8 @@ private:
 	QLabel* estimateTitle;
 	QWidget* leftPanel;
 	QHBoxLayout* topLayout;
+	QWidget* altWidget;
+	QVBoxLayout* altLayout;
 
 	QCustomPlot* plot;
 	QCPTextElement* plotTitle;

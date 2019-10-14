@@ -529,6 +529,9 @@ void MainWindow::go( QString const & inputFile ) {
 	options_->finish( finish );
 	options_->message( message );
 
+	// Reset in case this has been used before
+	if ( progressDialog->getValue() != 0 ) options_->reset()();
+
 	progressDialog->show();
 
 	runner = new ErrorXWorker( options_, this );

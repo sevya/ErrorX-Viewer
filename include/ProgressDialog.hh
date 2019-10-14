@@ -17,6 +17,8 @@ public:
 	explicit ProgressDialog( QWidget* parent = 0 );
 	~ProgressDialog();
 	
+	void reset();
+	
 	QPushButton* getCancelButton();
 	QProgressBar* getBar();
 	QLabel* getTopLabel();

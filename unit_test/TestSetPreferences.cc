@@ -205,7 +205,7 @@ void TestSetPreferences::enterSettingsCancelDone() {
 }
 
 void TestSetPreferences::cleanupTestCase() {
-	enterSettingsRestoreDefaultsDone();
+	enterSettingsRestoreDefaults();
 }
 
 // QTEST_MAIN( TestSetPreferences )

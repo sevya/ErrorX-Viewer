@@ -39,7 +39,10 @@ CDRTab::~CDRTab() {
 }
 
 void CDRTab::init() {
+	createTabWidget();
+}
 
+void CDRTab::createTabWidget() {
 	tabWidget = new QTabWidget( this );
 	tabWidget->setTabPosition( QTabWidget::South );
 
@@ -73,38 +76,35 @@ void CDRTab::init() {
 	setLayout( mainLayout );
 }
 
-void CDRTab::reinitCDR1Plot() {
-	cdr1Layout->removeWidget( cdr1Plot );
-	delete cdr1Plot;
-	cdr1Plot = new QCustomPlot();
-	cdr1Layout->addWidget( cdr1Plot );
-}
-
-void CDRTab::reinitCDR2Plot() {
-	cdr2Layout->removeWidget( cdr2Plot );
-	delete cdr2Plot;
-	cdr2Plot = new QCustomPlot();
-	cdr2Layout->addWidget( cdr2Plot );
-}
-
-void CDRTab::reinitCDR3Plot() {
-	cdr3Layout->removeWidget( cdr3Plot );
-	delete cdr3Plot;
-	cdr3Plot = new QCustomPlot();
-	cdr3Layout->addWidget( cdr3Plot );
+void CDRTab::createAltWidget() {
+	altWidget = new QWidget();
+	altLayout = new QVBoxLayout();
+	QLabel* text = new QLabel( "<b>CDR view is not available when using TSV input</b>", this );
+	text->setAlignment(Qt::AlignCenter);
+	altLayout->addWidget( text );
+	altWidget->setLayout( altLayout );
+	setLayout( altLayout );
 }
 
 void CDRTab::update() {
+	if ( records_==nullptr ) return;
+	
+	// Remove whatever is currently in the layout
+	qDeleteAll( this->children() );
+
 	// TSV input does not have this tab
 	if ( records_->get_options()->format() == "tsv" ) {
 		setEnabled( false );
-		// clear plots
-		reinitCDR1Plot();
-		reinitCDR2Plot();
-		reinitCDR3Plot();
-		return;
+
+		// Add in the alternative layout
+		createAltWidget();
 	} else {
 		setEnabled( true );
+
+		// Add in the TabWidget regular layout
+		createTabWidget();
+
+		// Update plots
 		cdrLengths = records_->cdr_lengths();
 
 		updateCDR1();
@@ -116,7 +116,7 @@ void CDRTab::update() {
 void CDRTab::updateCDR1() {
 	if ( records_==nullptr ) return;
 
-	reinitCDR1Plot();
+	// reinitCDR1Plot();
 
 	// Get CDR1
 	map<int,float> bins = errorx::util::bin_values( cdrLengths[ "CDR1" ],
@@ -180,7 +180,7 @@ void CDRTab::updateCDR1() {
 void CDRTab::updateCDR2() {
 	if ( records_==nullptr ) return;
 
-	reinitCDR2Plot();
+	// reinitCDR2Plot();
 
 	// Get CDR2
 	map<int,float> bins = errorx::util::bin_values( cdrLengths[ "CDR2" ],
@@ -244,7 +244,7 @@ void CDRTab::updateCDR2() {
 void CDRTab::updateCDR3() {
 	if ( records_==nullptr ) return;
 
-	reinitCDR3Plot();
+	// reinitCDR3Plot();
 
 	// Get CDR3
 	map<int,float> bins = errorx::util::bin_values( cdrLengths[ "CDR3" ],

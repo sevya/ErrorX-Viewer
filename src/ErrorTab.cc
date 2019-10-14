@@ -31,7 +31,10 @@ ErrorTab::~ErrorTab() {
 }
 
 void ErrorTab::init() {
+	createTabWidget();
+}
 
+void ErrorTab::createTabWidget() {
 	lay1 = new QVBoxLayout( this );
 	beforeLabel = new QLabel( "Before correction", this );
 	afterLabel  = new QLabel( "After correction" , this );
@@ -72,7 +75,6 @@ void ErrorTab::init() {
 	topLayout->addWidget( plot );
 	
 	setLayout( topLayout );
-
 }
 
 void ErrorTab::initPlot() {
@@ -89,26 +91,37 @@ void ErrorTab::initPlot() {
 	plot->plotLayout()->addElement( 0, 0, plotTitle );
 }
 
-void ErrorTab::reinitPlot() {
-	layout()->removeWidget( plot );
-	delete plot;
-	initPlot();
-	layout()->addWidget( plot );
+void ErrorTab::createAltWidget() {
+	altWidget = new QWidget();
+	altLayout = new QVBoxLayout();
+	QLabel* text = new QLabel( "<b>Error profile is not available when using FASTA input</b>", this );
+	text->setAlignment(Qt::AlignCenter);
+	altLayout->addWidget( text );
+	altWidget->setLayout( altLayout );
+	setLayout( altLayout );
 }
 
 void ErrorTab::update() {
-	// FASTA format does not have this tab
-	if ( records_->get_options()->format() == "fasta" ) {
-		setEnabled( false );
-		reinitPlot();
-		return;
-	}
 	// If there are no good records, return now
 	if ( records_->good_records()==0 ) return;
 
+	// Remove whatever is currently in the layout
+	qDeleteAll( this->children() );
+ 
+	// FASTA input does not have this tab
+	if ( records_->get_options()->format() == "fasta" ) {
+		setEnabled( false );
+
+		// Add in the alternative layout
+		createAltWidget();
+
+		return;
+	}
+
 	setEnabled( true );
 	
-	reinitPlot();
+	createTabWidget();
+	// reinitPlot();
 
 	// Get error rate and set fields
 	double preErrorRate = records_->estimate_error_rate();

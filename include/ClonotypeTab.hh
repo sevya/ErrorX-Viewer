@@ -34,6 +34,9 @@ public slots:
 
 private:
 	void init();
+	void createTabWidget();
+	void createAltWidget();
+	
 	QString tableToQString();
 
 	errorx::SequenceRecordsSP records_;
@@ -48,6 +51,9 @@ private:
 	QPushButton* copyButton;
 	QPushButton* copyAllButton;
 	QPushButton* exportButton;
+
+	QWidget* altWidget;
+	QVBoxLayout* altLayout;
 
 };
 
