@@ -7,10 +7,14 @@
 #include "TestProjectExport.hh"
 #include "TestProjectImport.hh"
 #include "TestSetPreferences.hh"
+#include "gui_util.hh"
 
 // Note: This is equivalent to QTEST_APPLESS_MAIN for multiple test classes.
 int main( int argc, char** argv ) {
 	QApplication app( argc, argv );
+	#if defined(__linux__)
+		gui_util::registerFont( app );
+	#endif
 	int status = 0;
 	{
 		TestFastq tc;

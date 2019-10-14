@@ -16,12 +16,19 @@
 #include <iostream>
 
 #include "ErrorXOptions.hh"
+#include "gui_util.hh"
 
+#include <QStyleFactory>
 
 int main( int argc, char **argv ) {
 	QApplication app( argc, argv );
 	app.setWindowIcon( QIcon(":images/helix_icon.icns") );
-
+	// app.setStyle(QStyleFactory::create("Windows"));
+	// app.setStyle(QStyleFactory::create("Fusion"));
+	// Load the embedded font.
+#if defined(__linux__)
+	gui_util::registerFont( app );
+#endif
 	MainWindow* main = new MainWindow();
 	main->show();
 	return app.exec(); 

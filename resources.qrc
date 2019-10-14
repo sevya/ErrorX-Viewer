@@ -6,5 +6,6 @@
         <file>images/import.png</file>
         <file>images/save.png</file>
         <file>images/logo_horizontal_transparent.png</file>
-    </qresource>
+		<file>images/LucidaGrande.ttf</file> 
+   </qresource>
 </RCC>

@@ -24,7 +24,7 @@ HEADERS = ../include/ProgressDialog.hh ../include/MainWindow.hh ../include/Optio
 HEADERS += TestFastq.hh TestFasta.hh TestTSV.hh TestBadFastq.hh TestProjectExport.hh TestProjectImport.hh TestSetPreferences.hh
 SOURCES += TestFastq.cc TestFasta.cc TestTSV.cc TestBadFastq.cc TestProjectExport.cc TestProjectImport.cc TestSetPreferences.cc main.cc
 
-INCLUDEPATH += ../../ErrorX_devel/include/ ../include/ .
+INCLUDEPATH += ../include/ ../include/errorx/ .
 LIBS += -L ../lib/ -lerrorx
 
 DEFINES += "UNITTEST=1"
@@ -34,8 +34,15 @@ MOC_DIR = obj/
 
 CONFIG += c++11
 RESOURCES = ../resources.qrc
-QMAKE_POST_LINK = bash ../post_build_copy.sh $$TARGET
 ICON = ../images/helix_icon.icns
+
+unix:!macx {
+	QMAKE_POST_LINK = "patchelf --replace-needed liberrorx.so ../lib/liberrorx.so "$$TARGET
+}
+
+macx {
+	QMAKE_POST_LINK = bash post_build_copy.sh $$TARGET
+}
 
 CONFIG += qt debug
 

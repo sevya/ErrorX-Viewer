@@ -9,10 +9,23 @@
 #include <QGuiApplication>
 #include <QClipboard>
 #include <QTextStream>
+#include <QFont>
+#include <QFontDatabase>
 
+#include <QDebug>
 #include <thread>
+#include <iostream>
 
 namespace gui_util {
+
+void registerFont( QApplication const & app ) {
+	QString fontPath = ":/images/LucidaGrande.ttf";
+	int fontId = QFontDatabase::addApplicationFont( fontPath );
+	if (fontId != -1) {
+		QFont font("LucidaGrande");
+		app.setFont(font);
+	}
+}
 
 errorx::ErrorXOptionsSP optionsFromSettings( QSettings* const settings ) {
 	using namespace errorx;
@@ -44,7 +57,7 @@ errorx::ErrorXOptionsSP optionsFromSettings( QSettings* const settings ) {
 		"Resources" + 
 		QDir::separator();
 #elif defined(__linux__)
-// TODO fill in here
+	basePath = "/usr/local/src/errorx/";
 #endif
 
 	options->errorx_base( basePath.toStdString() );

@@ -13,13 +13,21 @@ OBJECTS_DIR = obj/
 MOC_DIR = obj/
 
 INCLUDEPATH += include/ include/errorx/
-LIBS += -L lib/ -lerrorx
+LIBS += -L /home/sevya/ErrorX-Viewer/lib/ -lerrorx
 CONFIG += c++11
 RESOURCES = resources.qrc
-QMAKE_POST_LINK = bash post_build_copy.sh $$TARGET
+
 ICON = images/helix_icon.icns
 
-# CONFIG += qt debug
+CONFIG += qt debug
+
+unix:!macx { 
+	QMAKE_POST_LINK = bash post_build_copy_linux.sh $$TARGET
+}
+
+macx {
+	QMAKE_POST_LINK = bash post_build_copy.sh $$TARGET
+}
 
 ex_extra.files = bin database internal_data lib optional_file model.nnet 
 ex_extra.path = Contents/Resources
