@@ -48,7 +48,7 @@ void TestFastq::testRunFromFileMenu() {
 	main->options_->error_threshold( errorx::constants::OPTIMIZED_THRESHOLD );
 	main->options_->correction( 'N' );
 	main->options_->allow_nonproductive( 1 );
-	main->options_->species( "human" );
+	main->options_->species( "mouse" );
 	main->options_->igtype( "Ig" );
 
 
@@ -85,9 +85,9 @@ void TestFastq::verifyTabCorrectness() {
 void TestFastq::checkSummaryTab() {
 
 	QCOMPARE( main->summaryTab_->line2->text(), "100" );
-	QCOMPARE( main->summaryTab_->line3->text(), "79" );
-	QCOMPARE( main->summaryTab_->line4->text(), "37" );
-	QCOMPARE( main->summaryTab_->line5->text(), "79" );
+	QCOMPARE( main->summaryTab_->line3->text(), "100" );
+	QCOMPARE( main->summaryTab_->line4->text(), "85" ); // 85 productive sequences found
+	QCOMPARE( main->summaryTab_->line5->text(), "99" ); // 99 unique sequences found
 
 	auto it = main->summaryTab_->plotBars->data()->begin();
 	QCOMPARE( it->mainKey(), 1 );
@@ -95,15 +95,15 @@ void TestFastq::checkSummaryTab() {
 
 	it++;
 	QCOMPARE( it->mainKey(), 2 );
-	QCOMPARE( it->mainValue(), 79 );
+	QCOMPARE( it->mainValue(), 100 );
 
 	it++;
 	QCOMPARE( it->mainKey(), 3 );
-	QCOMPARE( it->mainValue(), 37 );
+	QCOMPARE( it->mainValue(), 85 );
 
 	it++;
 	QCOMPARE( it->mainKey(), 4 );
-	QCOMPARE( it->mainValue(), 79 );
+	QCOMPARE( it->mainValue(), 100 );
 }
 
 void TestFastq::checkDataTab() {
@@ -243,7 +243,7 @@ void TestFastq::checkErrorTab() {
 	QCOMPARE( main->errorTab_->afterErrorRate->text(), "22" );
 
 	auto it = main->errorTab_->plotBars->data()->begin();
-	vector<int> histogramValues = { 3, 13, 6, 12, 7, 6, 4, 8, 6, 5, 3, 3, 0, 1, 0, 0, 2 };
+	vector<int> histogramValues = { 19,34,16,11,6,3,2,2,3,1,2,0,0,0,0,0,0,0,0,1 };
 
 	for ( size_t ii = 0; ii < histogramValues.size(); ++ii ) {
 		QCOMPARE( it->mainKey(), ii );
@@ -259,16 +259,16 @@ void TestFastq::checkGeneTab() {
 
 	// Set up correct values for V gene histogram
 	map<string,int> valuesV = { 
-		make_pair("IGHV3-66", 22),
-		make_pair("IGHV3-23", 12),
-		make_pair("IGHV3-53", 6),
-		make_pair("IGHV3-NL1", 6),
-		make_pair("IGHV3-11", 4),
-		make_pair("IGHV3-48", 4),
-		make_pair("IGHV3-7", 4),
-		make_pair("IGHV3-30", 4),
-		make_pair("IGHV3-15", 3),
-		make_pair("IGHV3-69-1", 3)
+		make_pair( "IGHV3-2", 15 ),
+		make_pair( "IGHV5-6", 9 ),
+		make_pair( "IGHV1-7", 8 ),
+		make_pair( "IGHV2-6-1", 7 ),
+		make_pair( "IGHV1-4", 6 ),
+		make_pair( "IGHV14-3", 5 ),
+		make_pair( "IGHV9-3-1", 4 ),
+		make_pair( "IGHV2-9", 4 ),
+		make_pair( "IGHV9-4", 3 ),
+		make_pair( "IGHV2-6-4", 3 ),
 		};
 
 	// Get tick labels from histogram
@@ -297,9 +297,11 @@ void TestFastq::checkGeneTab() {
 
 	// Do the same for J genes
 	map<string,int> valuesJ = { 
-		make_pair("N/A", 62),
-		make_pair("IGHJ4", 11),
-		make_pair("IGHJ1", 6)
+		make_pair( "IGHJ2", 29 ),
+		make_pair( "IGHJ4", 25 ),
+		make_pair( "IGHJ3", 36 ),
+		make_pair( "IGHJ1", 9 ),
+		make_pair( "N/A", 1 )
 	};
 
 	// Get tick labels from histogram
