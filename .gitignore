@@ -20,6 +20,10 @@ output/
 ./*fasta.out
 ./*tsv
 
+ErrorX_Viewer.dmg
+100.fast*
+1000.fast*
+unit_test/testing/100.fasta.out
 .qmake.stash
 
 *sublime-workspace

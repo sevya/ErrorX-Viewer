@@ -41,7 +41,7 @@ unix:!macx {
 }
 
 macx {
-	QMAKE_POST_LINK = bash post_build_copy.sh $$TARGET
+	QMAKE_POST_LINK = bash ../post_build_copy.sh $$TARGET
 }
 
 CONFIG += qt debug

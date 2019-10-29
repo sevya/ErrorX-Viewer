@@ -107,4 +107,4 @@ private:
 
 } // namespace errorx
 
-#endif /* IGBLASTPARSER_HH_ */
+#endif // IGBLASTPARSER_HH_

@@ -16,30 +16,30 @@ int main( int argc, char** argv ) {
 		gui_util::registerFont( app );
 	#endif
 	int status = 0;
-	{
-		TestFastq tc;
-		status |= QTest::qExec(&tc, argc, argv);
-	}
-	{
-		TestFasta tc;
-		status |= QTest::qExec(&tc, argc, argv);
-	}
-	{
-		TestTSV tc;
-		status |= QTest::qExec(&tc, argc, argv);
-	}
-	{
-		TestBadFastq tc;
-		status |= QTest::qExec(&tc, argc, argv);
-	}
-	{
-		TestProjectExport tc;
-		status |= QTest::qExec(&tc, argc, argv);	
-	}
-	{
-		TestProjectImport tc;
-		status |= QTest::qExec(&tc, argc, argv);	
-	}
+	// {
+	// 	TestFastq tc;
+	// 	status |= QTest::qExec(&tc, argc, argv);
+	// }
+	// {
+	// 	TestFasta tc;
+	// 	status |= QTest::qExec(&tc, argc, argv);
+	// }
+	// {
+	// 	TestTSV tc;
+	// 	status |= QTest::qExec(&tc, argc, argv);
+	// }
+	// {
+	// 	TestBadFastq tc;
+	// 	status |= QTest::qExec(&tc, argc, argv);
+	// }
+	// {
+	// 	TestProjectExport tc;
+	// 	status |= QTest::qExec(&tc, argc, argv);	
+	// }
+	// {
+	// 	TestProjectImport tc;
+	// 	status |= QTest::qExec(&tc, argc, argv);	
+	// }
 	{
 		TestSetPreferences tc;
 		status |= QTest::qExec(&tc, argc, argv);	

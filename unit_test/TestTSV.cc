@@ -55,20 +55,43 @@ void TestTSV::verifyTabCorrectness() {
 }
 
 
+void TestTSV::compareFiles( QString const & fileOne, QString const & fileTwo ) {
+	ifstream in1( fileOne.toStdString() );
+	ifstream in2( fileTwo.toStdString() );
+
+	string line1;
+	string line2;
+
+	vector<string> tokens1;
+	vector<string> tokens2;
+
+	while (getline( in1, line1)) {
+		getline( in2, line2 );
+		tokens1 = errorx::util::tokenize_string<string>( line1, "\t" );	
+		tokens2 = errorx::util::tokenize_string<string>( line2, "\t" );	
+
+		QCOMPARE( tokens1.size(), tokens2.size() );
+
+		for ( size_t ii = 0; ii < tokens1.size(); ++ii ) {
+			QCOMPARE( tokens1[ ii ], tokens2[ ii ] );
+		}
+	}
+}
+
 void TestTSV::checkSummaryTab() {
 
-	QCOMPARE( main->summaryTab_->line2->text(), "250" );
-	QCOMPARE( main->summaryTab_->line3->text(), "250" );
+	QCOMPARE( main->summaryTab_->line2->text(), "100" );
+	QCOMPARE( main->summaryTab_->line3->text(), "100" );
 	QCOMPARE( main->summaryTab_->line4->text(), "N/A" );
-	QCOMPARE( main->summaryTab_->line5->text(), "1" );
+	QCOMPARE( main->summaryTab_->line5->text(), "99" );
 
 	auto it = main->summaryTab_->plotBars->data()->begin();
 	QCOMPARE( it->mainKey(), 1 );
-	QCOMPARE( it->mainValue(), 250 );
+	QCOMPARE( it->mainValue(), 100 );
 
 	it++;
 	QCOMPARE( it->mainKey(), 2 );
-	QCOMPARE( it->mainValue(), 250 );
+	QCOMPARE( it->mainValue(), 100 );
 
 	it++;
 	QCOMPARE( it->mainKey(), 3 );
@@ -76,7 +99,7 @@ void TestTSV::checkSummaryTab() {
 
 	it++;
 	QCOMPARE( it->mainKey(), 4 );
-	QCOMPARE( it->mainValue(), 1 );
+	QCOMPARE( it->mainValue(), 99 );
 }
 
 void TestTSV::checkDataTab() {
@@ -133,16 +156,16 @@ void TestTSV::checkTableExport() {
 	// Export first with full_data selected
 	main->dataTab_->checkBox->setChecked( true );
 	main->dataTab_->exportTable( "data_table_export.tsv" );
-	QCOMPARE( gui_util::checksum( "data_table_export.tsv" ), 
-			  gui_util::checksum( "correct_table_long_tsv.tsv" ));
+	compareFiles( "data_table_export.tsv", "correct_table_long_tsv.tsv" );
+
 	QFile file( "data_table_export.tsv" );
 	file.remove();
 	
 	// Export first with full_data selected
 	main->dataTab_->checkBox->setChecked( false );
 	main->dataTab_->exportTable( "data_table_export.tsv" );
-	QCOMPARE( gui_util::checksum( "data_table_export.tsv" ),
-			  gui_util::checksum( "correct_table_short_tsv.tsv" ));
+	compareFiles( "data_table_export.tsv", "correct_table_short_tsv.tsv" );
+
 	file.remove();
 }
 
@@ -152,9 +175,8 @@ void TestTSV::checkTableCopy() {
 	main->dataTab_->copyAll();
 
 	gui_util::clipboardToFile( "data_table_copy.tsv" );
+	compareFiles( "data_table_copy.tsv", "correct_table_long_tsv.tsv" );
 
-	QCOMPARE( gui_util::checksum( "data_table_copy.tsv" ), 
-			  gui_util::checksum( "correct_table_long_tsv.tsv" ));
 	QFile file( "data_table_copy.tsv" );
 	file.remove();
 	
@@ -163,20 +185,25 @@ void TestTSV::checkTableCopy() {
 	main->dataTab_->copyAll();
 
 	gui_util::clipboardToFile( "data_table_copy.tsv" );
+	compareFiles( "data_table_copy.tsv", "correct_table_short_tsv.tsv" );
 
-	QCOMPARE( gui_util::checksum( "data_table_copy.tsv" ), 
-			  gui_util::checksum( "correct_table_short_tsv.tsv" ));
 	file.remove();
 }
 
 void TestTSV::checkErrorTab() {
 
-	QCOMPARE( main->errorTab_->beforeErrorRate->text(), "54" );
-	QCOMPARE( main->errorTab_->afterErrorRate->text(), "32" );
+	QCOMPARE( main->errorTab_->beforeErrorRate->text(), "16" );
+	QCOMPARE( main->errorTab_->afterErrorRate->text(),  "11" );
 
 	auto it = main->errorTab_->plotBars->data()->begin();
-	QCOMPARE( it->mainKey(), 0 );
-	QCOMPARE( it->mainValue(), 250 );
+	vector<int> histogramValues = { 18,32,19,11,4,5,1,3,1,3,1,1,0,0,0,0,0,0,0,0,0,1 };
+
+	for ( size_t ii = 0; ii < histogramValues.size(); ++ii ) {
+		QCOMPARE( it->mainKey(), ii );
+		QCOMPARE( it->mainValue(), histogramValues[ ii ] );
+
+		++it;
+	}
 }
  
 void TestTSV::checkTSVTabsEliminated() {
@@ -194,9 +221,9 @@ void TestTSV::testTSVDialog() {
 	foreach ( QWidget* w, QApplication::topLevelWidgets() ) {
 		ConfirmFile* confirm = qobject_cast<ConfirmFile*>( w );
 		if ( confirm != nullptr ) {
-			confirm->setFile( "testing/ExampleInput250.tsv" );
+			confirm->setFile( "testing/ExampleInput.tsv" );
 
-			QCOMPARE( confirm->fileEdit->text(), "testing/ExampleInput250.tsv" );
+			QCOMPARE( confirm->fileEdit->text(), "testing/ExampleInput.tsv" );
 			QVERIFY( !confirm->radioButtonFASTQ->isChecked() );
 			QVERIFY( confirm->radioButtonTSV->isChecked() );
 

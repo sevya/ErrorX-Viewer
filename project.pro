@@ -13,7 +13,7 @@ OBJECTS_DIR = obj/
 MOC_DIR = obj/
 
 INCLUDEPATH += include/ include/errorx/
-LIBS += -L /home/sevya/ErrorX-Viewer/lib/ -lerrorx
+LIBS += -L lib/ -lerrorx
 CONFIG += c++11
 RESOURCES = resources.qrc
 
