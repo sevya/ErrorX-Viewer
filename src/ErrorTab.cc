@@ -87,7 +87,7 @@ void ErrorTab::initPlot() {
 	QFont font;
 	font.setBold( true );
 	plot->plotLayout()->insertRow(0);
-	plotTitle = new QCPTextElement( plot,  "Error histogram", font );
+	plotTitle = new QCPTextElement( plot,  "Nucleotide error histogram", font );
 	plot->plotLayout()->addElement( 0, 0, plotTitle );
 }
 
@@ -125,10 +125,10 @@ void ErrorTab::update() {
 
 	// Get error rate and set fields
 	double preErrorRate = records_->estimate_error_rate();
-	beforeErrorRate->setText( QString::number(preErrorRate*1000, 'g', 2 ));
+	beforeErrorRate->setText( QString::number(preErrorRate*1000.0, 'g', 2 ));
 	double estimatedRecall = errorx::constants::OPTIMIZED_RECALL;
 	double postErrorRate = preErrorRate * (1.0-estimatedRecall);
-	afterErrorRate->setText( QString::number(postErrorRate*1000, 'g', 2 ));
+	afterErrorRate->setText( QString::number(postErrorRate*1000.0, 'g', 2 ));
 
 	// Get error values
 	vector<int> errors;
@@ -174,7 +174,7 @@ void ErrorTab::update() {
 	QSharedPointer<QCPAxisTickerText> textTicker( new QCPAxisTickerText );
 	textTicker->addTicks( binIndices, binNames );
 	plot->xAxis->setTicker( textTicker );
-	plot->xAxis->setLabel( "# Errors per sequence" );
+	plot->xAxis->setLabel( "# Errors per sequence (nucleotides)" );
 	plot->yAxis->setLabel( "Counts" );
 
 	// add data to plot
