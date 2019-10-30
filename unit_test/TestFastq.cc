@@ -11,30 +11,6 @@ void TestFastq::testGUI() {
 	QCOMPARE( main->tabWidget->count(), 8 );
 }
 
-void TestFastq::testChecksum() {
-	QString testStr = "this is just a test\nof the checksum function\tto make sure it's equivalent";
-	
-	QFile fileOne( "fileOne.txt" );
-	fileOne.open( QIODevice::WriteOnly );
-	QTextStream outOne( &fileOne );
-	outOne << testStr;
-	fileOne.close();
-
-	QFile fileTwo( "fileTwo.txt" );
-	fileTwo.open( QIODevice::WriteOnly );
-	QTextStream outTwo( &fileTwo );
-	outTwo << testStr;
-	fileTwo.close();
-
-	QCOMPARE( 
-		gui_util::checksum( "fileOne.txt" ), 
-		gui_util::checksum( "fileTwo.txt" ) 
-		);
-
-	fileOne.remove();
-	fileTwo.remove();
-}
-
 void TestFastq::testRunFromFileMenu() {
 
 	main = new MainWindow();

@@ -13,7 +13,6 @@ public:
 
 private slots:
 	void testGUI();
-	void testChecksum();
 	void testRunFromFileMenu();
 
 public slots:

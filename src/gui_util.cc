@@ -66,18 +66,6 @@ errorx::ErrorXOptionsSP optionsFromSettings( QSettings* const settings ) {
 	return options;
 }
 
-QByteArray checksum( QString const & fileName ) {
-	QCryptographicHash hash( QCryptographicHash::Sha1 );
-	QFile file( fileName );
-
-	if ( file.open( QIODevice::ReadOnly ) ) {
-		hash.addData( file.readAll() );
-	}
-
-	// Retrieve the SHA1 signature of the file
-	return hash.result();
-}
-
 void clipboardToFile( QString const & fileName ) {
 	QFile file( fileName );
 	file.open( QIODevice::WriteOnly );
