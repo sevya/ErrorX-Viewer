@@ -12,7 +12,7 @@ HEADERS = include/ProgressDialog.hh include/MainWindow.hh include/OptionsDialog.
 OBJECTS_DIR = obj/
 MOC_DIR = obj/
 
-INCLUDEPATH += include/
+INCLUDEPATH += include/ include/errorx/
 
 CONFIG += c++11
 RESOURCES = resources.qrc
@@ -33,7 +33,6 @@ macx {
 }
 
 win32 {
-	INCLUDEPATH += include/errorx/
 	DEFINES += "ERRORX_EXPORTS"
 	# LIBS += C:\Users\sevya\boost_1_68_0\boost_1_68_0\stage\lib\libboost_filesystem-vc141-mt-x64-1_68.lib
 	LIBPATH += C:\Users\sevya\boost_1_68_0\boost_1_68_0\stage\lib\
