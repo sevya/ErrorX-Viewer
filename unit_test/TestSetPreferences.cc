@@ -178,7 +178,7 @@ void TestSetPreferences::enterSettingsCancel() {
 void TestSetPreferences::enterSettingsAcceptDone() {
 	executionDone = 1;
 
-	QCOMPARE( main->options_->error_threshold(), 0.9 );
+	QCOMPARE( main->options_->error_threshold(), constants::OPTIMIZED_THRESHOLD_VECTOR[ 3 ] );
 	QCOMPARE( main->options_->nthreads(), 3 );
 	QCOMPARE( main->options_->correction(), 'P' );
 	QCOMPARE( main->options_->allow_nonproductive(), 1 );

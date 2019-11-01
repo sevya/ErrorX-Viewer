@@ -13,7 +13,6 @@ public:
 
 private slots:
 	void testGUI();
-	void testChecksum();
 	void testRunFromFileMenu();
 
 public slots:
@@ -24,6 +23,7 @@ private:
 	MainWindow* main;
 	bool executionDone=0;
 
+	void compareFiles( QString const & fileOne, QString const & fileTwo );
 	void checkSummaryTab();
 	void checkDataTab();
 	void checkTableExport();

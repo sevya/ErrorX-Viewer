@@ -12,6 +12,18 @@ then this class is used to make a NN prediction
 #ifndef ERRORPREDICTOR_HH_
 #define ERRORPREDICTOR_HH_
 
+/// manages dllexport and import for windows
+/// does nothing on Mac/Linux
+#if defined(_WIN32) || defined(_WIN64)
+#ifdef ERRORX_EXPORTS
+#define ERRORX_API __declspec(dllexport)
+#else
+#define ERRORX_API __declspec(dllimport)
+#endif
+#else
+#define ERRORX_API 
+#endif
+
 #include <iostream>
 #include <fstream>
 #include <assert.h>
@@ -29,7 +41,7 @@ using namespace std;
 
 namespace errorx {
 
-class ErrorPredictor {
+class ERRORX_API ErrorPredictor {
 
 public:
 	/**

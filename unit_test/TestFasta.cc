@@ -24,7 +24,7 @@ void TestFasta::testRunFromFileMenu() {
 	main->options_->error_threshold( errorx::constants::OPTIMIZED_THRESHOLD );
 	main->options_->correction( 'N' );
 	main->options_->allow_nonproductive( 1 );
-	main->options_->species( "human" );
+	main->options_->species( "mouse" );
 	main->options_->igtype( "Ig" );
 
 
@@ -58,12 +58,35 @@ void TestFasta::verifyTabCorrectness() {
 	checkGeneTab();
 }
 
+void TestFasta::compareFiles( QString const & fileOne, QString const & fileTwo ) {
+	ifstream in1( fileOne.toStdString() );
+	ifstream in2( fileTwo.toStdString() );
+
+	string line1;
+	string line2;
+
+	vector<string> tokens1;
+	vector<string> tokens2;
+
+	while (getline( in1, line1)) {
+		getline( in2, line2 );
+		tokens1 = errorx::util::tokenize_string<string>( line1, "\t" );	
+		tokens2 = errorx::util::tokenize_string<string>( line2, "\t" );	
+
+		QCOMPARE( tokens1.size(), tokens2.size() );
+
+		for ( size_t ii = 0; ii < tokens1.size(); ++ii ) {
+			QCOMPARE( tokens1[ ii ], tokens2[ ii ] );
+		}
+	}
+}
+
 void TestFasta::checkSummaryTab() {
 
 	QCOMPARE( main->summaryTab_->line2->text(), "100" );
-	QCOMPARE( main->summaryTab_->line3->text(), "79" );
-	QCOMPARE( main->summaryTab_->line4->text(), "37" );
-	QCOMPARE( main->summaryTab_->line5->text(), "79" );
+	QCOMPARE( main->summaryTab_->line3->text(), "100" );
+	QCOMPARE( main->summaryTab_->line4->text(), "85" );
+	QCOMPARE( main->summaryTab_->line5->text(), "99" );
 
 	auto it = main->summaryTab_->plotBars->data()->begin();
 	QCOMPARE( it->mainKey(), 1 );
@@ -71,15 +94,15 @@ void TestFasta::checkSummaryTab() {
 
 	it++;
 	QCOMPARE( it->mainKey(), 2 );
-	QCOMPARE( it->mainValue(), 79 );
+	QCOMPARE( it->mainValue(), 100 );
 
 	it++;
 	QCOMPARE( it->mainKey(), 3 );
-	QCOMPARE( it->mainValue(), 37 );
+	QCOMPARE( it->mainValue(), 85 );
 
 	it++;
 	QCOMPARE( it->mainKey(), 4 );
-	QCOMPARE( it->mainValue(), 79 );
+	QCOMPARE( it->mainValue(), 99 );
 }
 
 void TestFasta::checkDataTab() {
@@ -137,16 +160,15 @@ void TestFasta::checkTableExport() {
 	// Export first with full_data selected
 	main->dataTab_->checkBox->setChecked( true );
 	main->dataTab_->exportTable( "data_table_export.tsv" );
-	QCOMPARE( gui_util::checksum( "data_table_export.tsv" ), 
-			  gui_util::checksum( "correct_table_long_fasta.tsv" ));
+	compareFiles( "data_table_export.tsv", "correct_table_long_fasta.tsv" );
 	QFile file( "data_table_export.tsv" );
 	file.remove();
 	
 	// Export first with full_data selected
 	main->dataTab_->checkBox->setChecked( false );
 	main->dataTab_->exportTable( "data_table_export.tsv" );
-	QCOMPARE( gui_util::checksum( "data_table_export.tsv" ),
-			  gui_util::checksum( "correct_table_short_fasta.tsv" ));
+	compareFiles( "data_table_export.tsv", "correct_table_short_fasta.tsv" );
+
 	file.remove();
 }
 
@@ -156,9 +178,8 @@ void TestFasta::checkTableCopy() {
 	main->dataTab_->copyAll();
 
 	gui_util::clipboardToFile( "data_table_copy.tsv" );
+	compareFiles( "data_table_copy.tsv", "correct_table_long_fasta.tsv" );
 
-	QCOMPARE( gui_util::checksum( "data_table_copy.tsv" ), 
-			  gui_util::checksum( "correct_table_long_fasta.tsv" ));
 	QFile file( "data_table_copy.tsv" );
 	file.remove();
 	
@@ -167,9 +188,8 @@ void TestFasta::checkTableCopy() {
 	main->dataTab_->copyAll();
 
 	gui_util::clipboardToFile( "data_table_copy.tsv" );
+	compareFiles( "data_table_copy.tsv", "correct_table_short_fasta.tsv" );
 
-	QCOMPARE( gui_util::checksum( "data_table_copy.tsv" ), 
-			  gui_util::checksum( "correct_table_short_fasta.tsv" ));
 	file.remove();
 }
 
@@ -197,8 +217,8 @@ void TestFasta::checkClonotypeTab() {
 void TestFasta::checkClonotypeTableExport() {
 	// Export clonotype table
 	main->clonotypeTab_->exportTable( "clonotype_table_export.tsv" );
-	QCOMPARE( gui_util::checksum( "clonotype_table_export.tsv" ),
-			  gui_util::checksum( "correct_clonotype_table.tsv" ));
+	compareFiles( "clonotype_table_export.tsv", "correct_clonotype_table.tsv" );
+
 	QFile file( "clonotype_table_export.tsv" );
 	file.remove();
 }
@@ -207,9 +227,7 @@ void TestFasta::checkClonotypeTableCopy() {
 	// Copy clonotype table to clipboard
 	main->clonotypeTab_->copyAll();
 	gui_util::clipboardToFile( "clonotype_table_copy.tsv" );
-
-	QCOMPARE( gui_util::checksum( "clonotype_table_copy.tsv" ),
-			  gui_util::checksum( "correct_clonotype_table.tsv" ));
+	compareFiles( "clonotype_table_copy.tsv", "correct_clonotype_table.tsv" );
 
 	QFile file( "clonotype_table_copy.tsv" );
 	file.remove();
@@ -221,16 +239,16 @@ void TestFasta::checkGeneTab() {
 
 	// Set up correct values for V gene histogram
 	map<string,int> valuesV = { 
-		make_pair("IGHV3-66", 22),
-		make_pair("IGHV3-23", 12),
-		make_pair("IGHV3-53", 6),
-		make_pair("IGHV3-NL1", 6),
-		make_pair("IGHV3-11", 4),
-		make_pair("IGHV3-48", 4),
-		make_pair("IGHV3-7", 4),
-		make_pair("IGHV3-30", 4),
-		make_pair("IGHV3-15", 3),
-		make_pair("IGHV3-69-1", 3)
+		make_pair( "IGHV3-2", 15 ),
+        make_pair( "IGHV5-6", 9 ),
+        make_pair( "IGHV1-7", 8 ),
+        make_pair( "IGHV2-6-1", 7 ),
+        make_pair( "IGHV1-4", 6 ),
+        make_pair( "IGHV14-3", 5 ),
+        make_pair( "IGHV9-3-1", 4 ),
+        make_pair( "IGHV2-9", 4 ),
+        make_pair( "IGHV9-4", 3 ),
+        make_pair( "IGHV2-6-4", 3 )
 		};
 
 	// Get tick labels from histogram
@@ -259,9 +277,11 @@ void TestFasta::checkGeneTab() {
 
 	// Do the same for J genes
 	map<string,int> valuesJ = { 
-		make_pair("N/A", 62),
-		make_pair("IGHJ4", 11),
-		make_pair("IGHJ1", 6)
+		make_pair( "IGHJ2", 29 ),
+                make_pair( "IGHJ4", 25 ),
+                make_pair( "IGHJ3", 36 ),
+                make_pair( "IGHJ1", 9 ),
+                make_pair( "N/A", 1 )
 	};
 
 	// Get tick labels from histogram
@@ -294,6 +314,9 @@ void TestFasta::testFASTADialog() {
 		ConfirmFile* confirm = qobject_cast<ConfirmFile*>( w );
 		if ( confirm != nullptr ) {
 			confirm->setFile( "testing/100.fasta" );
+
+			// Set the species to mouse
+			confirm->radioButtonMouse->setChecked( true );
 
 			QCOMPARE( confirm->fileEdit->text(), "testing/100.fasta" );
 			QVERIFY( confirm->radioButtonFASTA->isChecked() );

@@ -21,6 +21,7 @@ public slots:
 
 private:
 	void verifyExport();
+	void compareFiles( QString const & fileOne, QString const & fileTwo );
 
 	MainWindow* main;
 	bool executionDone=0;

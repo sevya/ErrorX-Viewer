@@ -31,6 +31,29 @@ void TestProjectExport::testRunFromFileMenu() {
 	while ( !executionDone ) QTest::qWait( 250 );
 }
 
+
+void TestProjectExport::compareFiles( QString const & fileOne, QString const & fileTwo ) {
+	ifstream in1( fileOne.toStdString() );
+	ifstream in2( fileTwo.toStdString() );
+
+	string line1;
+	string line2;
+
+	vector<string> tokens1;
+	vector<string> tokens2;
+
+	while (getline( in1, line1)) {
+		getline( in2, line2 );
+		tokens1 = errorx::util::tokenize_string<string>( line1, "\t" );	
+		tokens2 = errorx::util::tokenize_string<string>( line2, "\t" );	
+
+		QCOMPARE( tokens1.size(), tokens2.size() );
+
+		for ( size_t ii = 0; ii < tokens1.size(); ++ii ) {
+			QCOMPARE( tokens1[ ii ], tokens2[ ii ] );
+		}
+	}
+}
 void TestProjectExport::verifyTabCorrectness() {
 	executionDone = 1;
 
@@ -43,6 +66,9 @@ void TestProjectExport::enterDialog() {
 		if ( confirm != nullptr ) {
 			confirm->setFile( "testing/100.fastq" );
 
+			// Set the species to mouse
+			confirm->radioButtonMouse->setChecked( true );
+			
 			QCOMPARE( confirm->fileEdit->text(), "testing/100.fastq" );
 			QVERIFY( confirm->radioButtonFASTQ->isChecked() );
 			QVERIFY( !confirm->radioButtonTSV->isChecked() );
@@ -60,11 +86,7 @@ void TestProjectExport::verifyExport() {
 	main->dataTab_->selectCheckBox();
 	main->dataTab_->exportTable( "export_project.tsv");
 
-
-	QCOMPARE( 
-		gui_util::checksum( "export_project.tsv" ), 
-		gui_util::checksum( "correct_table_long.tsv" ) 
-		);
+	compareFiles( "export_project.tsv", "correct_table_long.tsv" );
 
 	QFile file( "export_project.tsv" );
 	file.remove();

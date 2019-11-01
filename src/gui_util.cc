@@ -46,9 +46,9 @@ errorx::ErrorXOptionsSP optionsFromSettings( QSettings* const settings ) {
 		);
 
 	// Set basepath based on OS and the way the app gets bundled
-	QString basePath;
+	QString basePath = ".";
 #if defined(_WIN32) || defined(_WIN64)
-// TODO fill in here
+	basePath = QCoreApplication::applicationDirPath();
 #elif defined(__APPLE__) || defined(__MACH__) 
 	basePath = QCoreApplication::applicationDirPath() +
 		QDir::separator() +
@@ -64,18 +64,6 @@ errorx::ErrorXOptionsSP optionsFromSettings( QSettings* const settings ) {
 	options->verbose( 0 );
 
 	return options;
-}
-
-QByteArray checksum( QString const & fileName ) {
-	QCryptographicHash hash( QCryptographicHash::Sha1 );
-	QFile file( fileName );
-
-	if ( file.open( QIODevice::ReadOnly ) ) {
-		hash.addData( file.readAll() );
-	}
-
-	// Retrieve the SHA1 signature of the file
-	return hash.result();
 }
 
 void clipboardToFile( QString const & fileName ) {

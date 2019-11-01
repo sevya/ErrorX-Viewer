@@ -137,10 +137,12 @@ void ClonotypeTab::update() {
 	size_t N = 100;
  
 	// Sort vector of ClonotypeGroups by the number of members
+	// After that sort by name
 	std::sort( clonotypes.begin(), clonotypes.end(),
 		[]( ClonotypeGroup const & a, ClonotypeGroup const & b ) -> bool
 	{
-		return a.size() > b.size();
+		if ( a.size() != b.size() ) return a.size() > b.size();
+		else return a.toString() < b.toString();
 	});
  
 	// If the length of the V gene vector is less than N, adjust accordingly

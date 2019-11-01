@@ -170,7 +170,6 @@ void OptionsDialog::acceptDialog() {
 	settings_->setValue( "allow_nonproductive", (bool)comboBox->currentIndex() );
  
  	int errorThresholdIndex = slider->value();
-	// TODO optimize thresholds
 	double threshold = OPTIMIZED_THRESHOLD_VECTOR[ errorThresholdIndex ];
 	settings_->setValue( "error_threshold", threshold );
  
