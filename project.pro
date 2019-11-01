@@ -12,24 +12,69 @@ HEADERS = include/ProgressDialog.hh include/MainWindow.hh include/OptionsDialog.
 OBJECTS_DIR = obj/
 MOC_DIR = obj/
 
-INCLUDEPATH += include/ include/errorx/
-LIBS += -L lib/ -lerrorx
+INCLUDEPATH += include/
+
 CONFIG += c++11
 RESOURCES = resources.qrc
 
 ICON = images/helix_icon.icns
 
-CONFIG += qt debug
-
 unix:!macx { 
+	LIBS += -L lib/ -lerrorx
 	QMAKE_POST_LINK = bash post_build_copy_linux.sh $$TARGET
 }
 
 macx {
+	LIBS += -L lib/ -lerrorx
 	QMAKE_POST_LINK = bash post_build_copy.sh $$TARGET
+	ex_extra.files = bin database internal_data lib optional_file model.nnet 
+	ex_extra.path = Contents/Resources
+	QMAKE_BUNDLE_DATA += ex_extra
 }
 
-ex_extra.files = bin database internal_data lib optional_file model.nnet 
-ex_extra.path = Contents/Resources
-QMAKE_BUNDLE_DATA += ex_extra
+win32 {
+	INCLUDEPATH += include/errorx/
+	DEFINES += "ERRORX_EXPORTS"
+	# LIBS += C:\Users\sevya\boost_1_68_0\boost_1_68_0\stage\lib\libboost_filesystem-vc141-mt-x64-1_68.lib
+	LIBPATH += C:\Users\sevya\boost_1_68_0\boost_1_68_0\stage\lib\
+
+	QMAKE_POST_LINK = C:\Qt\Qt5.10.1\5.10.1\msvc2017_64\bin\windeployqt.exe release
+
+	SOURCES += src/errorx/AbSequence.cc \
+		src/errorx/ErrorPredictor.cc \
+		src/errorx/ErrorXOptions.cc \
+		src/errorx/keras/DataChunk2D.cc \
+		src/errorx/keras/DataChunkFlat.cc \
+		src/errorx/keras/KerasModel.cc \
+		src/errorx/keras/LayerActivation.cc \
+		src/errorx/keras/LayerDense.cc \
+		src/errorx/SequenceFeatures.cc \
+		src/errorx/SequenceRecord.cc \
+		src/errorx/ClonotypeGroup.cc \
+		src/errorx/errorx.cc \
+		src/errorx/IGBlastParser.cc \
+		src/errorx/ProgressBar.cc \
+		src/errorx/SequenceQuery.cc \
+		src/errorx/SequenceRecords.cc \
+		src/errorx/util.cc
+
+	HEADERS += include/errorx/AbSequence.hh \
+		include/errorx/ErrorPredictor.hh \
+		include/errorx/ErrorXOptions.hh \
+		include/errorx/keras/DataChunk2D.hh \
+		include/errorx/keras/DataChunkFlat.hh \
+		include/errorx/keras/KerasModel.hh \
+		include/errorx/keras/LayerActivation.hh \
+		include/errorx/keras/LayerDense.hh \
+		include/errorx/SequenceFeatures.hh \
+		include/errorx/SequenceRecord.hh \
+		include/errorx/ClonotypeGroup.hh \
+		include/errorx/errorx.hh \
+		include/errorx/IGBlastParser.hh \
+		include/errorx/ProgressBar.hh \
+		include/errorx/SequenceQuery.hh \
+		include/errorx/SequenceRecords.hh \
+		include/errorx/util.hh
+}
+
 

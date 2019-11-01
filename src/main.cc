@@ -12,7 +12,6 @@
 
 #include <functional>
 #include <thread>
-#include <unistd.h>
 #include <iostream>
 
 #include "ErrorXOptions.hh"
