@@ -21,7 +21,7 @@ HEADERS += TestFastq.hh TestFasta.hh TestTSV.hh TestBadFastq.hh TestProjectExpor
 
 SOURCES += TestFastq.cc TestFasta.cc TestTSV.cc TestBadFastq.cc TestProjectExport.cc TestProjectImport.cc TestSetPreferences.cc main.cc
 
-INCLUDEPATH += ../include/
+INCLUDEPATH += ../include/ ../include/errorx/
 
 DEFINES += "UNITTEST=1"
 
@@ -31,6 +31,11 @@ MOC_DIR = obj/
 CONFIG += c++11
 RESOURCES = ../resources.qrc
 ICON = ../images/helix_icon.icns
+
+SOURCES += ../src/ProgressDialog.cc ../src/MainWindow.cc ../src/OptionsDialog.cc ../src/ConfirmFile.cc ../src/ErrorTab.cc ../src/SummaryTab.cc ../src/GeneTab.cc ../src/CDRTab.cc ../src/ClonotypeTab.cc ../src/DataTab.cc ../src/ParamsTab.cc ../src/qcustomplot.cc ../src/ErrorXWorker.cc ../src/gui_util.cc ../src/WelcomeTab.cc
+
+HEADERS += ../include/ProgressDialog.hh ../include/MainWindow.hh ../include/OptionsDialog.hh ../include/ConfirmFile.hh ../include/ErrorTab.hh ../include/SummaryTab.hh ../include/GeneTab.hh ../include/CDRTab.hh ../include/ClonotypeTab.hh ../include/DataTab.hh ../include/ParamsTab.hh ../include/qcustomplot.hh ../include/ErrorXWorker.hh ../include/gui_util.hh ../include/WelcomeTab.hh
+
 
 unix:!macx {
 	LIBS += -L ../lib/ -lerrorx
@@ -56,8 +61,6 @@ win32 {
 
 	QMAKE_POST_LINK = C:\Qt\Qt5.10.1\5.10.1\msvc2017_64\bin\windeployqt.exe debug
 
-	SOURCES += ../src/ProgressDialog.cc ../src/MainWindow.cc ../src/OptionsDialog.cc ../src/ConfirmFile.cc ../src/ErrorTab.cc ../src/SummaryTab.cc ../src/GeneTab.cc ../src/CDRTab.cc ../src/ClonotypeTab.cc ../src/DataTab.cc ../src/ParamsTab.cc ../src/qcustomplot.cc ../src/ErrorXWorker.cc ../src/gui_util.cc ../src/WelcomeTab.cc
-
 	SOURCES += ../src/errorx/AbSequence.cc \
 		../src/errorx/ErrorPredictor.cc \
 		../src/errorx/ErrorXOptions.cc \
@@ -75,9 +78,6 @@ win32 {
 		../src/errorx/SequenceQuery.cc \
 		../src/errorx/SequenceRecords.cc \
 		../src/errorx/util.cc
-
-	HEADERS += ../include/ProgressDialog.hh ../include/MainWindow.hh ../include/OptionsDialog.hh ../include/ConfirmFile.hh ../include/ErrorTab.hh ../include/SummaryTab.hh ../include/GeneTab.hh ../include/CDRTab.hh ../include/ClonotypeTab.hh ../include/DataTab.hh ../include/ParamsTab.hh ../include/qcustomplot.hh ../include/ErrorXWorker.hh ../include/gui_util.hh ../include/WelcomeTab.hh
-
 
 	HEADERS += ../include/errorx/AbSequence.hh \
 		../include/errorx/ErrorPredictor.hh \
