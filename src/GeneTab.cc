@@ -266,8 +266,8 @@ void GeneTab::updateJGene() {
 }
 
 void GeneTab::exportPDF( QString const & outputDir ) {
-	vGenePlot->savePdf( outputDir + QDir::separator() + "vgene_summary.pdf" );
-	jGenePlot->savePdf( outputDir + QDir::separator() + "jgene_summary.pdf" );
+	vGenePlot->savePdf( outputDir + QDir::separator() + "vgene_summary.pdf", 640, 480 );
+	jGenePlot->savePdf( outputDir + QDir::separator() + "jgene_summary.pdf", 640, 480 );
 }
 
 void GeneTab::records( errorx::SequenceRecordsSP const records ) { records_ = records; }

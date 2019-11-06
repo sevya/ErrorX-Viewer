@@ -306,9 +306,10 @@ void CDRTab::updateCDR3() {
 }
 
 void CDRTab::exportPDF( QString const & outputDir ) {
-	cdr1Plot->savePdf( outputDir + QDir::separator() + "cdr1_lengths.pdf" );
-	cdr2Plot->savePdf( outputDir + QDir::separator() + "cdr2_lengths.pdf" );
-	cdr3Plot->savePdf( outputDir + QDir::separator() + "cdr3_lengths.pdf" );
+	
+	cdr1Plot->savePdf( outputDir + QDir::separator() + "cdr1_lengths.pdf", 680, 480 );
+	cdr2Plot->savePdf( outputDir + QDir::separator() + "cdr2_lengths.pdf", 640, 480 );
+	cdr3Plot->savePdf( outputDir + QDir::separator() + "cdr3_lengths.pdf", 640, 480 );
 }
 
 void CDRTab::records( errorx::SequenceRecordsSP const records ) { records_ = records; }

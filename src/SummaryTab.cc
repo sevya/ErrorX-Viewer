@@ -211,7 +211,7 @@ void SummaryTab::update() {
 }
 
 void SummaryTab::exportPDF( QString const & outputDir ) {
-	plot->savePdf( outputDir + QDir::separator() + "summary.pdf" );
+	plot->savePdf( outputDir + QDir::separator() + "summary.pdf", 640, 480 );
 }
 
 void SummaryTab::records( errorx::SequenceRecordsSP const records ) { records_ = records; }

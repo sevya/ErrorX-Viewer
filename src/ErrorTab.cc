@@ -187,7 +187,7 @@ void ErrorTab::update() {
 }
 
 void ErrorTab::exportPDF( QString const & outputDir ) {
-	plot->savePdf( outputDir + QDir::separator() + "error_profile.pdf" );
+	plot->savePdf( outputDir + QDir::separator() + "error_profile.pdf", 640, 480 );
 }
 void ErrorTab::records( errorx::SequenceRecordsSP const records ) { records_ = records; }
 errorx::SequenceRecordsSP ErrorTab::records() { return records_; }
