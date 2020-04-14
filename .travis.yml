@@ -17,7 +17,7 @@ addons:
     - libqt5charts5 
     - libqt5charts5-dev 
     - patchelf
-  brew:
+  homebrew:
     packages:
     - qt5
     - patchelf
