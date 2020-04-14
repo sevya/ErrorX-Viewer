@@ -1,7 +1,7 @@
 language: cpp
 os:
-  - linux
-#  - osx
+#  - linux
+  - osx
 dist: bionic
 env:
 #  - CODECOV_TOKEN="d02d94b5-2584-4ed9-8eb5-8a3bcda19af8"
@@ -20,6 +20,7 @@ addons:
   brew:
     packages:
     - qt5
+    - patchelf
 before_install:
 # - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
 # - sudo apt-get update -qq
