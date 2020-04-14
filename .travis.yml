@@ -8,16 +8,30 @@ env:
 addons:
   apt:
     packages: 
-#    - csh
-#    - gcovr
+    - qtbase5-dev 
+    - qtdeclarative5-dev 
+    - libqt5webkit5-dev 
+    - libsqlite3-dev 
+    - qt5-default 
+    - qttools5-dev-tools 
+    - libqt5charts5 
+    - libqt5charts5-dev 
+  brew:
+    packages:
+    - qt5
 before_install:
 # - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
 # - sudo apt-get update -qq
- - sudo apt-get install qtbase5-dev qtdeclarative5-dev libqt5webkit5-dev libsqlite3-dev
- - sudo apt-get install qt5-default qttools5-dev-tools
- - sudo apt-get install libqt5charts5 libqt5charts5-dev
+# - sudo apt-get install qtbase5-dev qtdeclarative5-dev libqt5webkit5-dev libsqlite3-dev
+# - sudo apt-get install qt5-default qttools5-dev-tools
+# - sudo apt-get install libqt5charts5 libqt5charts5-dev
 # - brew install qt5
 script:
+  - git clone https://github.com/sevya/errorx errorx_base/
+  - cd errorx_base/
+  - make library
+  - cd ..
+  - cp errorx_base/lib/* lib/
   - qmake project.pro 
   - make
   - cd unit_test
