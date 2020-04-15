@@ -28,10 +28,10 @@ script:
   - make library
   - cd ..
   - cp errorx_base/lib/* lib/
-  - /usr/local/opt/qt/bin/qmake project.pro 
+  - qmake project.pro 
   - make
   - cd unit_test
-  - /usr/local/opt/qt/bin/qmake unit_test.pro
+  - qmake unit_test.pro
   - make
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then UnitTest.app/Contents/MacOS/UnitTest; fi
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then ./UnitTest; fi
