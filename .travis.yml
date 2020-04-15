@@ -1,7 +1,7 @@
 language: cpp
 os:
-#  - linux
-  - osx
+  - linux
+#  - osx
 dist: bionic
 env:
 #  - CODECOV_TOKEN="d02d94b5-2584-4ed9-8eb5-8a3bcda19af8"
@@ -22,13 +22,6 @@ addons:
     - qt5
     - patchelf
     update: true
-before_install:
-# - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
-# - sudo apt-get update -qq
-# - sudo apt-get install qtbase5-dev qtdeclarative5-dev libqt5webkit5-dev libsqlite3-dev
-# - sudo apt-get install qt5-default qttools5-dev-tools
-# - sudo apt-get install libqt5charts5 libqt5charts5-dev
-# - brew install qt5
 script:
   - git clone https://github.com/sevya/errorx errorx_base/
   - cd errorx_base/

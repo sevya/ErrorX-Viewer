@@ -3,6 +3,8 @@
 #include <QApplication>
 #include <QWidgetList>
 #include <QTimer>
+#include <thread>
+
 #include "gui_util.hh"
 #include "constants.hh"
 
